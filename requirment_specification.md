@@ -14,5 +14,7 @@
 <h2>Functional requirements</h2>
 <p> Points are collected by a) flying, in related proportion to distance between airports b) by making requests to dispatcher database to check flight avalibility c)other functions may ne added later.</br>The game session has no time limits but ends as soon as player visits all countries. At this point points are finally calculated and are written down in top chart players table. </br>Special features: a) from current airport "A" player can choose airport "B" and fly there,not all airports are always available to fly to, player can request weather conditions there, or rely on luck and fly without checking weather. If the airport("B") is not available for landing and player flew to it anyway, player is not allowed to land and is automatically directed to another airport("C") by programm (random, but in the same country as airport "B" gets some ponts as price of dispathcing) b)other features may be added or changed c)player can get information about visited countries, current position, current score, and list of airport codes in any country without charging points d) player can request distance information between airports using their codes for some charge </p>
 <h2>Quality requirements</h2>
-<p>Here we write Quality requirements</p>
-
+<p>Player must be able in any stage of the game to know their status, position, airports info etc.</br>
+</p>
+<h2>Boundary conditions from the task</h2>
+<p>1)game is played by keyboard 2) use given databases, althout they can be modified 3) concrete goal and good game experience 4)sustainability  5)game etiquette (12+)</p>

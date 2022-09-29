@@ -7,10 +7,10 @@
 <li>invent info request system</li>
 <li>player status display system (in terminal) text or, maybe, some graphical style using tables</li>
 <li>make new database for final scores, maybe it can be even stored somewhere inthe internet to be reachable from different computers</li>
-<li>-</li>
-<li>-</li>
-<li>-</li>
-<li>-</li>
+<li>make a list of commands, that player can use. and info description of them</li>
+<li>choose region or part of region (look through databases to know how we can filter regions</li>
+<li>choose type of airports, used in the game, and look how many of these types countries has. not to have like 100 or 1000 airports in every country, but keep for example only medium airports. to have 10-25 airports in one country. or shrink the list of airport somehow another way.</li>
+<li>confirm countries list in the chosen region (number of coutries may vary from different sources), and maybe modify database. decide, does visiting some country's exclave or remote island counts as visiting the country</li>
 <li>-</li>
 <li>-</li>
 <li>-</li>

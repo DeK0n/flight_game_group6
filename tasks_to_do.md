@@ -1,4 +1,4 @@
-<h1>TAsks to do</h1>
+<h1>Tasks to do</h1>
 <p>to make the first working version there is some task to do. When the basis is done, then we can modify the game and invent different rules. So these task should be done with keeping in mind, that code can be modified later</p>
 <ol>
 <li>Choose databases we need, make them and add to folder "databases" in this project</li>

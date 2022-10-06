@@ -10,4 +10,4 @@
 <p>Player must be able in any stage of the game to know their status, position, airports info etc.</br>
 </p>
 <h2>Boundary conditions from the task</h2>
-<p>1)game is played by keyboard 2) use given databases, althout they can be modified 3) concrete goal and good game experience 4)sustainability  5)game etiquette (12+)</p>
+<p>1) game is played by keyboard 2) use given databases, althout they can be modified 3) concrete goal and good game experience 4)sustainability  5) game etiquette (12+)</p>

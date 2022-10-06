@@ -11,7 +11,7 @@
 <li>choose region or part of region (look through databases to know how we can filter regions</li>
 <li>choose type of airports, used in the game, and look how many of these types countries has. not to have like 100 or 1000 airports in every country, but keep for example only medium airports. to have 10-25 airports in one country. or shrink the list of airport somehow another way.</li>
 <li>confirm countries list in the chosen region (number of coutries may vary from different sources), and maybe modify database. decide, does visiting some country's exclave or remote island counts as visiting the country</li>
-<li>-</li>
+<li>According to database Europe has 117 large airports in 50 countries, so for the beginning we can use Europe and maybe make task for player to visit any 20 countries</li>
 <li>-</li>
 <li>-</li>
 <li>-</li>

@@ -12,7 +12,7 @@ c)other functions may ne added later.</br>
 The game session has no time limits but ends as soon as player visits definite number countries.(numer is told in the beginning) At this point final score is calculated and is written to top chart players table.</br>
 d) flight price is calculated as 1cr=1km, weather forecast request cost 50cr(can be modified to balance)
 Special features: </br>
-a)</br>
+a)if player has flown to airport and it is closed - player gets some penalty(define penalty for balance, and actions - return to arrival airport - or move to another.)</br>
 b)other features may be added or changed</br>
 c)player can get information about visited countries, current position, current score, and list of airport codes in any country without charging points</br>
 d)NOT CONFIRMED IN BASE VERSION player can request distance information between airports using their codes for some charge </p>

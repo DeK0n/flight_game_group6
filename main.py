@@ -18,23 +18,24 @@ connection = mysql.connector.connect(
 menu.greetings()
 menu.commands()
 
+playerCredits = 10000
 playerName = input("Enter your name:")
-print('Use "fly" command to set starting point.')
+# print('Use "fly" command to set starting point.')
 functions.action()
 
 # distance
-def getInfoBy(icao):
-    sql = "SELECT latitude_deg, longitude_deg from airport where ident ='" + icao + "'"
-    # print(sql)
-    cursor = connection.cursor()
-    cursor.execute(sql)
-    result = cursor.fetchall()
-    return result
-icao = input("Enter 1st ICAO: ")
-a = getInfoBy(icao)[0]
-icao = input("Enter 2nd ICAO: ")
-b = getInfoBy(icao)[0]
-print(a, b)
-print(f"The distance between is {distance.distance(a, b).km:.2f} km")
+# def getInfoBy(icao):
+#     sql = "SELECT latitude_deg, longitude_deg from airport where ident ='" + icao + "'"
+#     # print(sql)
+#     cursor = connection.cursor()
+#     cursor.execute(sql)
+#     result = cursor.fetchall()
+#     return result
+# icao = input("Enter 1st ICAO: ")
+# a = getInfoBy(icao)[0]
+# icao = input("Enter 2nd ICAO: ")
+# b = getInfoBy(icao)[0]
+# print(a, b)
+# print(f"The distance between is {distance.distance(a, b).km:.2f} km")
 
 

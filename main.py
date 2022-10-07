@@ -4,14 +4,18 @@ from geopy import distance
 from unittest import result
 import mysql.connector
 
+#connection to database login-password input
+dbUser = input("Input local server user: ") #"root"?
+dbPw = input("Input local server password: ") #your pasword
+
 #connection to databases
 # use your user and password, host can be localhost or 127.0.0.0
 connection = mysql.connector.connect(
     host='localhost',
     port=3306,
     database='flight_game',
-    user='root',
-    password='12332167',
+    user= dbUser,
+    password= dbPw,
     autocommit=True
 )
 

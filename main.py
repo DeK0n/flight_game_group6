@@ -6,7 +6,7 @@ import mysql.connector
 
 #connection to database login-password input
 dbUser = input("Input local server user: ") #"root"?
-dbPw = input("Input local server password: ") #your pasword
+dbPw = input("Input local server password: ") #your password
 
 #connection to databases
 # use your user and password, host can be localhost or 127.0.0.0

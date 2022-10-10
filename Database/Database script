@@ -1,0 +1,14 @@
+#large_airport in EU:
+select id as ID, ident as IDENT, type as Airport_type, name as Name, latitude_deg as Latitude, longitude_deg as Longitude, continent as Continent, iso_country as "iso_country" from airport where type like '%large_airport%' and continent like '%EU%'
+
+#country.name in EU:
+select name as Name, continent as Continent, iso_country as iso_country from country where continent like '%EU%';
+
+#large_airport, country in EU:
+select airport.id as ID, airport.ident as IDENT, 
+airport.type as "Airport type", airport.name as "Airport name", 
+airport.latitude_deg as Latitude, airport.longitude_deg as Longitude, 
+airport.continent as Continent, airport.iso_country as iso_country, country.name as "Country name" from airport 
+inner join country 
+on country.iso_country = airport.iso_country
+where airport.continent like '%EU%' and airport.type like '%large_airport%';

@@ -1,5 +1,6 @@
+# GENERAL ----------------------------------------------------------------------------
 # imports
-from modules import menu, functions
+from modules import menu #,functions
 from geopy import distance
 from unittest import result
 import mysql.connector
@@ -20,10 +21,9 @@ connection = mysql.connector.connect(
     autocommit=True
 )
 
-#  FUNCTIONS
-# info
+# FUNCTIONS --------------------------------------------------------------------------
 
-
+# info (information about available destinations)
 def getInfo():
     sql = "SELECT ident,municipality,iso_country from airport where continent ='EU' and type = 'large_airport' "
     # print(sql)
@@ -34,18 +34,14 @@ def getInfo():
     for x in result:
         print("Country:", x[2], " ", "Id:", x[0], " ", "Municipality:", x[1])
 
-# status
-
-
+# status (printing information about current balance, position,visited countries)
 def getStatus():
     print("Your curent status:")
     print("Credits: "+str(playerCredits))
     print("Visited countries: "+str(playerVisited)+" : "+str(playerVisitedSet))
     print("Current position: "+str(playerPosition))
 
-# position
-
-
+# position (select position from database)
 def getPosition(icao):
     sql = "SELECT latitude_deg, longitude_deg from airport where ident ='" + icao + "'"
     # print(sql)
@@ -53,7 +49,7 @@ def getPosition(icao):
     cursor.execute(sql)
     return cursor.fetchall()
 
-# country code from airport code
+# country code (select from airport database)
 def getCountryCode(icao):
     sql = "SELECT iso_country from airport where ident ='" + icao + "'"
     # print(sql)
@@ -64,9 +60,7 @@ def getCountryCode(icao):
         z = (y[0])
     return z
 
-# distance
-
-
+# distance (calculating distance between points)
 def getDistance():
     icao = playerPosition
     a = getPosition(icao)[0]
@@ -87,39 +81,37 @@ def weather():
         landing = False
     return landing
 
-# random id generator
-
-
+# random player id generator
 def playerIdGen():
     import random
-    x = "id"+str(random.randint(1000, 9999))
+    x = "id"+str(random.randint(1000, 9999)) # e.g. id7362
     return x
 
 
-# VARIABLES for current game session
-playerId = playerIdGen()
-playerName = input("Enter your name:")
-playerCredits = 10000
-playerVisited = 1
-playerVisitedSet = {"BE"}
-playerPosition = "EBBR"  # later change to random or chosen
-weatherPenalty = 200
-weatherCheck = 50
+# VARIABLES for current game session-------------------------------------------------
 
-# Actual game starts
+playerId = playerIdGen() #applying unique id for player from generator
+playerName = input("Enter your name: ")
+playerCredits = 10000 # starting balance
+playerVisited = 1 
+playerVisitedSet = {"BE"} # Set of countries codes to prevent double counting
+playerPosition = "EBBR"  # later change to random or chosen
+weatherPenalty = 200 #in credits cr
+weatherCheck = 50 #in credits cr
+playerGoal = 5 # countries to visit
+
+# BODY OF THE GAME --------------------------------------------------------------------
 menu.greetings()
 menu.commands()
 print("Your starting point is Brusseles, Belgium (EBBR)")
-command = ""
-while playerVisited != 15 and playerCredits > 0:
-    command = input("Enter command: ")
-    print("------")
 
+while playerVisited != playerGoal and playerCredits > 0:
+    command = input("Enter command: ")
     condition = weather()
     
     if command == "fly":
         # add what happens if wrong code
-        playerDestination = input("Enter destination code: ")
+        playerDestination = input("Enter destination code: ") # add restriction to travel outside available list
         playerDestinationCountry = getCountryCode(playerDestination)
              
         if condition == True:  # if weather
@@ -148,10 +140,9 @@ while playerVisited != 15 and playerCredits > 0:
     else:
         print("Wrong command")
 else:
-    if playerVisited >= 15:
-        print("You finished the game. Final status is:")
+    if playerVisited >= playerGoal:
+        print("You finished the game. Final status is:") #add name, id, and score to database
         getStatus()
     elif playerCredits <= 0:
         print("You ran out of credits. Balance is: "+str(playerCredits))
 
-    # print(playerStatus)

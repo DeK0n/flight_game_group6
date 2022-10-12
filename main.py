@@ -53,6 +53,17 @@ def getPosition(icao):
     cursor.execute(sql)
     return cursor.fetchall()
 
+# country code from airport code
+def getCountryCode(icao):
+    sql = "SELECT iso_country from airport where ident ='" + icao + "'"
+    # print(sql)
+    cursor = connection.cursor()
+    cursor.execute(sql)
+    country = cursor.fetchall()
+    for y in country:
+        z = (y[0])
+    return z
+
 # distance
 
 
@@ -109,15 +120,16 @@ while playerVisited != 15 and playerCredits > 0:
     if command == "fly":
         # add what happens if wrong code
         playerDestination = input("Enter destination code: ")
-        
+        playerDestinationCountry = getCountryCode(playerDestination)
+             
         if condition == True:  # if weather
             ticket = getDistance()
             playerCredits = playerCredits-ticket
             playerPosition = playerDestination
 
-            if playerDestination not in playerVisitedSet:  # if visited this country
+            if playerDestinationCountry not in playerVisitedSet:  # if visited this country
                 playerVisited = playerVisited+1  # country counter
-                playerVisitedSet.add(playerDestination)  # visited list
+                playerVisitedSet.add(playerDestinationCountry)  # visited list
             print("You successfully got to destination point of " +
                   str(playerPosition)+". You've spent "+str(ticket)+" credits.")
         else:

@@ -3,6 +3,7 @@ from modules import menu, functions
 from geopy import distance
 from unittest import result
 import mysql.connector
+import random
 
 # connection to database login-password input
 dbUser = input("Input local server user: ")  # "root"
@@ -21,68 +22,121 @@ connection = mysql.connector.connect(
 
 #  FUNCTIONS
 # info
-
-
 def getInfo():
     sql = "SELECT ident,municipality,iso_country from airport where continent ='EU' and type = 'large_airport' "
     # print(sql)
     cursor = connection.cursor()
     cursor.execute(sql)
     result = cursor.fetchall()
+    print("List of airports:")
     for x in result:
         print("Country:", x[2], " ", "Id:", x[0], " ", "Municipality:", x[1])
 
-# distance
+# status
+def getStatus():
+    print("Your curent status:")
+    print("Credits: "+str(playerCredits))
+    print("Visited countries: "+str(playerVisited)+" : "+str(playerVisitedSet))
+    print("Current position: "+str(playerPosition))
 
-
-def getInfoBy(icao):
+# position
+def getPosition(icao):
     sql = "SELECT latitude_deg, longitude_deg from airport where ident ='" + icao + "'"
     # print(sql)
     cursor = connection.cursor()
     cursor.execute(sql)
-    result = cursor.fetchall()
-    return result
+    return cursor.fetchall()
 
+# distance
+def getDistance():
+    icao = playerPosition
+    a = getPosition(icao)[0]
+    icao = playerDestination
+    b = getPosition(icao)[0]
+    #print(a, b)
+    return distance.distance(a, b).km
+    
 
-icao = input("Enter 1st ICAO: ")
-a = getInfoBy(icao)[0]
-icao = input("Enter 2nd ICAO: ")
-b = getInfoBy(icao)[0]
-print(a, b)
-print(f"The distance between is {distance.distance(a, b).km:.2f} km")
+#random weather function
+def weather():
+    import random
+    x=random.randint(0,100)
+    # current chance of bad weather is set to 20%
+    if x <= 80:
+        landing = True
+    else:
+        landing = False
+    return landing
 
-# variables for current game session
-playerCredits = 10000
+# random id generator
+def playerIdGen():
+    import random
+    x="id"+str(random.randint(1000,9999))
+    return x
+
+# VARIABLES for current game session
+playerId = playerIdGen()
 playerName = input("Enter your name:")
+playerCredits = 10000
 playerVisited = 1
-playerPosition = ""
+playerVisitedSet = {"BE"}
+playerPosition = "EBBR" # later change to random or chosen
+weatherPenalty = 200
+weatherCheck = 50
 
 # Actual game starts
 menu.greetings()
 menu.commands()
+print("Your starting point is Brusseles, Belgium (EBBR)")
+command = ""
+while playerVisited != 15 and playerCredits>0:
+    command = input("Enter command: ")
+    print("------")
+    if command == "fly":
+        playerDestination = input("Enter destination code: ") # add what happens if wrong code
+        condition=weather()
 
-if playerVisited != 15:
-    command = ""
-    while command != "exit":
-        command = input("Enter command: ")
-        if command == "fly":
-            print("Enter destination code: ")
-
-        elif command == "check":
-            print("check")
-        elif command == "info":
-            print("List of airports:")
-            getInfo()
-        elif command == "status":
-            print("Your curent status:")
-
-        elif command == "commands":
-            print("commands")
-        elif command == "exit":
-            command = "exit"
-            print("Game stopped")
+        if condition == True: #if weather
+          ticket = getDistance()
+          playerCredits = playerCredits-ticket
+          playerPosition = playerDestination
+          if playerDestination not in playerVisitedSet: #if visited this country
+            playerVisited = playerVisited+1 # country counter
+            playerVisitedSet.add(playerDestination) # visited list
+          print("You successfully got to destination point of "+str(playerPosition)+". You've spent "+str(ticket)+" credits.")
         else:
-            print("Wrong command")
+            playerCredits = playerCredits-weatherPenalty
+            print("Destination is closed due to weather, you were penaltied "+str(weatherPenalty)+"credits and stayed at "+str(playerPosition)+".") 
+
+    elif command == "check":
+        playerDestination = input("Enter destination code for weather check: ") # add what happens if wrong code
+        condition=weather()
+        if condition == True:
+            print("Weather is good, airport is open")
+        else:
+            print("Weather is bad. Airport closed.")
+            print("Wait for good weather and check again")
+
+    elif command == "info":
+        getInfo()
+
+    elif command == "status":
+        getStatus()
+
+    elif command == "commands":
+        menu.commands()
+
+    elif command == "exit":
+        print("Game stopped")
+        break
+
+    else:
+        print("Wrong command")
 else:
-    print("The game is over. Your final status is:")
+    if playerVisited >= 15:
+        print("You finished the game. Final status is:")
+        getStatus()
+    elif playerCredits<=0:
+        print("You ran out of credits. Balance is: "+str(playerCredits))
+
     # print(playerStatus)

@@ -13,7 +13,7 @@ def commands():
     # List of commands
     print("----------------------------------")
     print('Command list:\n"fly": choose destination code and fly\
-\n"check": choose destination code and check weather\
+\n"check": check weather before flight\
 \n"info": see list of possible destinations\
 \n"status": see list of visited countries and amount of credits remaining\
 \n"commands": see list of commands')

@@ -5,7 +5,7 @@ from unittest import result
 import mysql.connector
 
 #connection to database login-password input
-dbUser = input("Input local server user: ") #"root"?
+dbUser = input("Input local server user: ") #"root"
 dbPw = input("Input local server password: ") #your password
 
 #connection to databases

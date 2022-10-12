@@ -1,17 +1,20 @@
 # GENERAL ----------------------------------------------------------------------------
 # imports
-from modules import menu #,functions
+
+from modules import menu  # ,functions
 from geopy import distance
 from unittest import result
 import mysql.connector
 import random
 
 # connection to database login-password input
+
 dbUser = input("Input local server user: ")  # "root"
 dbPw = input("Input local server password: ")  # your password
 
 # connection to databases
 # use your user and password, host can be localhost or 127.0.0.0
+
 connection = mysql.connector.connect(
     host='localhost',
     port=3306,
@@ -24,6 +27,8 @@ connection = mysql.connector.connect(
 # FUNCTIONS --------------------------------------------------------------------------
 
 # info (information about available destinations)
+
+
 def getInfo():
     sql = "SELECT ident,municipality,iso_country from airport where continent ='EU' and type = 'large_airport' "
     # print(sql)
@@ -35,6 +40,8 @@ def getInfo():
         print("Country:", x[2], " ", "Id:", x[0], " ", "Municipality:", x[1])
 
 # status (printing information about current balance, position,visited countries)
+
+
 def getStatus():
     print("Your curent status:")
     print("Credits: "+str(playerCredits))
@@ -42,6 +49,8 @@ def getStatus():
     print("Current position: "+str(playerPosition))
 
 # position (select position from database)
+
+
 def getPosition(icao):
     sql = "SELECT latitude_deg, longitude_deg from airport where ident ='" + icao + "'"
     # print(sql)
@@ -50,6 +59,8 @@ def getPosition(icao):
     return cursor.fetchall()
 
 # country code (select from airport database)
+
+
 def getCountryCode(icao):
     sql = "SELECT iso_country from airport where ident ='" + icao + "'"
     # print(sql)
@@ -57,10 +68,12 @@ def getCountryCode(icao):
     cursor.execute(sql)
     country = cursor.fetchall()
     for y in country:
-        z = (y[0])
-    return z
+        countrycode = (y[0])
+    return countrycode
 
 # distance (calculating distance between points)
+
+
 def getDistance():
     icao = playerPosition
     a = getPosition(icao)[0]
@@ -82,42 +95,50 @@ def weather():
     return landing
 
 # random player id generator
+
+
 def playerIdGen():
     import random
-    x = "id"+str(random.randint(1000, 9999)) # e.g. id7362
+    x = "id"+str(random.randint(1000, 9999))  # e.g. id7362
     return x
 
 
 # VARIABLES for current game session-------------------------------------------------
 
-playerId = playerIdGen() #applying unique id for player from generator
-playerName = input("Enter your name: ")
-playerCredits = 10000 # starting balance
-playerVisited = 1 
-playerVisitedSet = {"BE"} # Set of countries codes to prevent double counting
+playerId = playerIdGen()  # applying unique id for player from generator
+playerName = " " 
+playerCredits = 10000  # starting balance
+playerVisited = 1
+playerVisitedSet = {"BE"}  # Set of countries codes to prevent double counting
 playerPosition = "EBBR"  # later change to random or chosen
-weatherPenalty = 200 #in credits cr
-weatherCheck = 50 #in credits cr
-playerGoal = 5 # countries to visit
+weatherPenalty = 200  # in credits cr
+weatherCheck = 50  # in credits cr
+playerGoal = 5  # countries to visit
 
 # BODY OF THE GAME --------------------------------------------------------------------
+menu.footer()
+menu.pictureAircraft1()
+playerName = input("Enter your name: ")
 menu.greetings()
+
 menu.commands()
 print("Your starting point is Brusseles, Belgium (EBBR)")
 
 while playerVisited != playerGoal and playerCredits > 0:
+    menu.divider()
     command = input("Enter command: ")
     condition = weather()
-    
+
     if command == "fly":
         # add what happens if wrong code
-        playerDestination = input("Enter destination code: ") # add restriction to travel outside available list
+        # add restriction to travel outside available list
+        playerDestination = input("Enter destination code: ")
         playerDestinationCountry = getCountryCode(playerDestination)
-             
+
         if condition == True:  # if weather
             ticket = getDistance()
-            playerCredits = playerCredits-ticket
-            playerPosition = playerDestination
+            playerCredits = playerCredits-ticket  # paying for flight
+            playerPosition = playerDestination  # changing current position
 
             if playerDestinationCountry not in playerVisitedSet:  # if visited this country
                 playerVisited = playerVisited+1  # country counter
@@ -136,13 +157,16 @@ while playerVisited != playerGoal and playerCredits > 0:
         menu.commands()
     elif command == "exit":
         print("Game stopped")
+        menu.footer()
         break
     else:
         print("Wrong command")
-else:
-    if playerVisited >= playerGoal:
-        print("You finished the game. Final status is:") #add name, id, and score to database
-        getStatus()
-    elif playerCredits <= 0:
-        print("You ran out of credits. Balance is: "+str(playerCredits))
 
+if playerVisited >= playerGoal:
+    # add name, id, and score to database
+    print("You finished the game. Final status is:")
+    getStatus()
+    menu.footer
+elif playerCredits <= 0:
+    print("You ran out of credits. Balance is: "+str(playerCredits))
+    menu.footer

@@ -1,6 +1,8 @@
+def divider():
+    print("-------------------------------------------------------------------------------------")
 def greetings():
     # Greetings
-    print("--------------------------------------------------------------------")
+    divider()
     # main goal
     print("Hello! Fly between airports on your own aircraft!")
     # goal
@@ -11,11 +13,20 @@ def greetings():
 
 def commands():
     # List of commands
-    print("--------------------------------------------------------------------")
+    divider()
     print('Command list:\n"fly": choose destination code and fly\
 \n"check": check weather before flight\
 \n"info": see list of possible destinations\
 \n"status": see list of visited countries and amount of credits remaining\
 \n"commands": see list of commands')
-    print("--------------------------------------------------------------------")
+    divider()
 
+def pictureAircraft1():
+    print("      __!__")
+    print("^----o-(_)-o----^")
+    divider()
+
+def footer():
+    divider()
+    divider()
+    print(" ")

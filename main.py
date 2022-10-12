@@ -1,6 +1,7 @@
 # GENERAL ----------------------------------------------------------------------------
 # imports
 
+from tabnanny import check
 from modules import menu  # ,functions
 from geopy import distance
 from unittest import result
@@ -69,12 +70,12 @@ def getCountryCode(icao):
     country = cursor.fetchall()
     for y in country:
         countrycode = (y[0])
-    return countrycode
+        return countrycode
 
 # distance (calculating distance between points)
 
 
-def getDistance():
+def getDistance(playerPosition,playerDestination):
     icao = playerPosition
     a = getPosition(icao)[0]
     icao = playerDestination
@@ -128,15 +129,34 @@ while playerVisited != playerGoal and playerCredits > 0:
     menu.divider()
     command = input("Enter command: ")
     condition = weather()
+    playerDestination = " "
+
+    if command == "check":
+        print("You were charged "+str(weatherCheck)+" cr for checking weather")
+        playerCredits = playerCredits-weatherCheck  # paying for checking
+        checkDestination = input("Enter airport code to check weather: ")
+        if condition == False:
+            print("The weather is bad and airport is closed. Try again or another.")
+            command == "again"
+        else:
+            print('The weather is good.')
+            commandCheck = input('Fly there? Type "yes" to fly or "no" to choose another command: ')
+            if commandCheck == "yes":
+                playerDestination = checkDestination
+                command = "fly"
+            elif commandCheck == "no":
+                command = "again"
+            else:
+                command = "wrong command"
 
     if command == "fly":
-        # add what happens if wrong code
-        # add restriction to travel outside available list
-        playerDestination = input("Enter destination code: ")
-        playerDestinationCountry = getCountryCode(playerDestination)
+        if playerDestination == " ":
+            playerDestination = input("Enter destination code: ") # add what happens if wrong code , add restriction to travel outside available list
+        icao = playerDestination
+        playerDestinationCountry = getCountryCode(icao)
 
         if condition == True:  # if weather
-            ticket = getDistance()
+            ticket = getDistance(playerPosition,playerDestination)
             playerCredits = playerCredits-ticket  # paying for flight
             playerPosition = playerDestination  # changing current position
 
@@ -155,12 +175,14 @@ while playerVisited != playerGoal and playerCredits > 0:
         getStatus()
     elif command == "commands":
         menu.commands()
+    elif command == "again":
+        print("Retruning to choose command...")
     elif command == "exit":
         print("Game stopped")
         menu.footer()
         break
     else:
-        print("Wrong command")
+        print("Wrong command. Try again.")
 
 if playerVisited >= playerGoal:
     # add name, id, and score to database

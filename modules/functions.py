@@ -8,26 +8,3 @@ def weather():
     else:
         landing = False
     return landing
-
-# action draft
-def action():
-    command = ""
-    while command != "exit":
-        command = input("Enter command: ")
-        if command == "fly":
-            print("Enter destination code: ")
-        
-        elif command == "check":
-            print("check")
-        elif command == "info":
-            print("list of destinations: example code: AA") #change to lists from database
-        elif command == "status":
-            print("status")
-        elif command == "commands":
-            print("commands")
-        elif command == "exit":
-            command = "exit"
-            print("Game stopped")
-        else:
-            print("Wrong command")
-

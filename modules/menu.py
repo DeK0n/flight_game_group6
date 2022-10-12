@@ -5,14 +5,9 @@ def greetings():
     print("Hello! Fly between airports on your own aircraft!")
     # goal
     print("Your goal is to visit 15 countries with lowest budjet.")
-    # where player can fly
-    print("Use info commands to see list of available destinations.")
-    # economy
-    print("Choose shortest routes to pay less.")
-    print("You can check weather forecast for 50 cr")
     # weather
     print("Airports have 20 percent chance to be closed because of bad weather.")
-    print("----------------------------------")
+    print("In case you fly to closed airport you get -200cr penalty and stay in current point.")
 
 def commands():
     # List of commands

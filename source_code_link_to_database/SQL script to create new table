@@ -1,0 +1,24 @@
+#create table named "score"
+
+CREATE TABLE score(
+	ID INTEGER auto_increment,
+	name VARCHAR(40),
+	credit INTEGER NOT NULL,
+	PRIMARY KEY (id)
+);
+
+
+
+
+
+#insert player id, name and credits
+
+INSERT INTO score (ID, name, credit)
+VALUES (1, "trang", 0);
+
+INSERT INTO score (ID, name, credit)
+VALUES (2, "denis", 0);
+
+
+show tables;
+select * from table;

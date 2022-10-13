@@ -1,7 +1,7 @@
 #create table named "score"
 
 CREATE TABLE score(
-	ID INTEGER auto_increment,
+	ID VARCHAR(40) auto_increment,
 	name VARCHAR(40),
 	credit INTEGER NOT NULL,
 	PRIMARY KEY (id)

@@ -1,10 +1,8 @@
 # GENERAL ----------------------------------------------------------------------------
 # imports
 
-from tabnanny import check
 from modules import menu  # ,functions
 from geopy import distance
-from unittest import result
 import mysql.connector
 import random
 

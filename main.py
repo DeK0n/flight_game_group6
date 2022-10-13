@@ -117,7 +117,8 @@ weatherCheck = 50  # in credits cr
 playerGoal = 5  # countries to visit
 
 # BODY OF THE GAME --------------------------------------------------------------------
-menu.footer()
+menu.divider()
+menu.divider()
 menu.pictureAircraft1()
 playerName = input("Enter your name: ")
 menu.greetings()
@@ -136,8 +137,8 @@ while playerVisited != playerGoal and playerCredits > 0:
         playerCredits = playerCredits-weatherCheck  # paying for checking
         checkDestination = input("Enter airport code to check weather: ")
         if condition == False:
-            print("The weather is bad and airport is closed. Try again or another.")
-            command == "again"
+            menu.messageBadWeather()
+            command = "again"
         else:
             print('The weather is good.')
             commandCheck = input('Fly there? Type "yes" to fly or "no" to choose another command: ')
@@ -147,7 +148,7 @@ while playerVisited != playerGoal and playerCredits > 0:
             elif commandCheck == "no":
                 command = "again"
             else:
-                command = "wrong command"
+                command = "wrongcommand" # wrongcommand is not in command list so it goes to else statement
 
     if command == "fly":
         if playerDestination == " ":
@@ -157,7 +158,7 @@ while playerVisited != playerGoal and playerCredits > 0:
 
         if condition == True:  # if weather
             ticket = getDistance(playerPosition,playerDestination)
-            playerCredits = playerCredits-ticket  # paying for flight
+            playerCredits = playerCredits-ticket  # paying for flight + ADD inability to pay more than player has
             playerPosition = playerDestination  # changing current position
 
             if playerDestinationCountry not in playerVisitedSet:  # if visited this country
@@ -176,19 +177,22 @@ while playerVisited != playerGoal and playerCredits > 0:
     elif command == "commands":
         menu.commands()
     elif command == "again":
-        print("Retruning to choose command...")
+        menu.messageReturning()
     elif command == "exit":
-        print("Game stopped")
-        menu.footer()
+        menu.messageStop()
+        menu.divider()
+        menu.divider()
         break
     else:
-        print("Wrong command. Try again.")
+        menu.messageWrong()
 
 if playerVisited >= playerGoal:
     # add name, id, and score to database
     print("You finished the game. Final status is:")
     getStatus()
-    menu.footer
+    menu.divider()
+    menu.divider()
 elif playerCredits <= 0:
-    print("You ran out of credits. Balance is: "+str(playerCredits))
-    menu.footer
+    menu.messageNoMoney(playerCredits)
+    menu.divider()
+    menu.divider()

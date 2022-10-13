@@ -26,7 +26,17 @@ def pictureAircraft1():
     print("^----o-(_)-o----^")
     divider()
 
-def footer():
-    divider()
-    divider()
-    print(" ")
+def messageBadWeather():
+    print("The weather is bad and airport is closed. Try again or another destination.")
+
+def messageWrong():
+    print("Wrong command. Try again.")
+
+def messageStop():
+    print("Game stopped")
+
+def messageReturning():
+    print("Retruning to choose command...")
+
+def messageNoMoney(playerCredits):
+    print("You ran out of credits. Balance is: "+str(playerCredits))

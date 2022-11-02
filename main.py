@@ -73,7 +73,7 @@ def getCountryCode(icao):
 # distance (calculating distance between points)
 
 
-def getDistance(playerPosition,playerDestination):
+def getDistance(playerPosition, playerDestination):
     icao = playerPosition
     a = getPosition(icao)[0]
     icao = playerDestination
@@ -83,6 +83,8 @@ def getDistance(playerPosition,playerDestination):
 
 
 # random weather function
+
+
 def weather():
     import random
     x = random.randint(0, 100)
@@ -105,7 +107,7 @@ def playerIdGen():
 # VARIABLES for current game session-------------------------------------------------
 
 playerId = playerIdGen()  # applying unique id for player from generator
-playerName = " " 
+playerName = " "
 playerCredits = 10000  # starting balance
 playerVisited = 1
 playerVisitedSet = {"BE"}  # Set of countries codes to prevent double counting
@@ -115,8 +117,7 @@ weatherCheck = 50  # in credits cr
 playerGoal = 5  # countries to visit
 
 # BODY OF THE GAME --------------------------------------------------------------------
-menu.divider()
-menu.divider()
+menu.divider(2)
 menu.pictureAircraft1()
 playerName = input("Enter your name: ")
 menu.greetings()
@@ -125,7 +126,7 @@ menu.commands()
 print("Your starting point is Brusseles, Belgium (EBBR)")
 
 while playerVisited != playerGoal and playerCredits > 0:
-    menu.divider()
+    menu.divider(1)
     command = input("Enter command: ")
     condition = weather()
     playerDestination = " "
@@ -139,24 +140,28 @@ while playerVisited != playerGoal and playerCredits > 0:
             command = "again"
         else:
             print('The weather is good.')
-            commandCheck = input('Fly there? Type "yes" to fly or "no" to choose another command: ')
+            commandCheck = input(
+                'Fly there? Type "yes" to fly or "no" to choose another command: ')
             if commandCheck == "yes":
                 playerDestination = checkDestination
                 command = "fly"
             elif commandCheck == "no":
                 command = "again"
             else:
-                command = "wrongcommand" # wrongcommand is not in command list so it goes to else statement
+                # wrongcommand is not in command list so it goes to else statement
+                command = "wrongcommand"
 
     if command == "fly":
         if playerDestination == " ":
-            playerDestination = input("Enter destination code: ") # add what happens if wrong code , add restriction to travel outside available list
+            # add what happens if wrong code , add restriction to travel outside available list
+            playerDestination = input("Enter destination code: ")
         icao = playerDestination
         playerDestinationCountry = getCountryCode(icao)
 
         if condition == True:  # if weather
-            ticket = getDistance(playerPosition,playerDestination)
-            playerCredits = playerCredits-ticket  # paying for flight + ADD inability to pay more than player has
+            ticket = getDistance(playerPosition, playerDestination)
+            # paying for flight + ADD inability to pay more than player has
+            playerCredits = playerCredits-ticket
             playerPosition = playerDestination  # changing current position
 
             if playerDestinationCountry not in playerVisitedSet:  # if visited this country
@@ -178,8 +183,7 @@ while playerVisited != playerGoal and playerCredits > 0:
         menu.messageReturning()
     elif command == "exit":
         menu.messageStop()
-        menu.divider()
-        menu.divider()
+        menu.divider(2)
         break
     else:
         menu.messageWrong()
@@ -188,9 +192,7 @@ if playerVisited >= playerGoal:
     # add name, id, and score to database
     print("You finished the game. Final status is:")
     getStatus()
-    menu.divider()
-    menu.divider()
+    menu.divider(2)
 elif playerCredits <= 0:
     menu.messageNoMoney(playerCredits)
-    menu.divider()
-    menu.divider()
+    menu.divider(2)

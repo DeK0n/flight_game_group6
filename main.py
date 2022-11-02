@@ -1,7 +1,7 @@
 # GENERAL ----------------------------------------------------------------------------
 # imports
 
-from modules import menu  # ,functions
+from modules import menu, functions
 from geopy import distance
 import mysql.connector
 import random
@@ -95,26 +95,21 @@ def weather():
         landing = False
     return landing
 
-# random player id generator
 
-
-def playerIdGen():
-    import random
-    x = "id"+str(random.randint(1000, 9999))  # e.g. id7362
-    return x
 
 
 # VARIABLES for current game session-------------------------------------------------
 
-playerId = playerIdGen()  # applying unique id for player from generator
+playerId = functions.playerIdGen()  # applying unique id for player from generator
 playerName = " "
 playerCredits = 10000  # starting balance
 playerVisited = 1
-playerVisitedSet = {"BE"}  # Set of countries codes to prevent double counting
+playerVisitedSet = {"BE"}  # Set of countries codes to prevent double counting, correlating with starting position
 playerPosition = "EBBR"  # later change to random or chosen
+playerGoal = 5  # countries to visit
+
 weatherPenalty = 200  # in credits cr
 weatherCheck = 50  # in credits cr
-playerGoal = 5  # countries to visit
 
 # BODY OF THE GAME --------------------------------------------------------------------
 menu.divider(2)
@@ -133,7 +128,7 @@ while playerVisited != playerGoal and playerCredits > 0:
 
     if command == "check":
         print("You were charged "+str(weatherCheck)+" cr for checking weather")
-        playerCredits = playerCredits-weatherCheck  # paying for checking
+        playerCredits = playerCredits-weatherCheck  # paying for checking weather
         checkDestination = input("Enter airport code to check weather: ")
         if condition == False:
             menu.messageBadWeather()

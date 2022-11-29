@@ -1,77 +1,33 @@
-# IMPORTS
+# GENERAL ----------------------------------------------------------------------------
+# imports
+
 from modules import menu, functions
 from geopy import distance
 import mysql.connector
 import random
-from flask import Flask, request
-import math
-import json
 
-# CONNECTION TO DATABASE - use your user and password, host can be localhost or 127.0.0.0
+# connection to database login-password input
+
+# dbUser = input("Input local server user: ")  # "root"
+# dbPw = input("Input local server password: ")  # your password
+
+# connection to databases
+# use your user and password, host can be localhost or 127.0.0.0
 
 connection = mysql.connector.connect(
     host='localhost',
     port=3306,
-    database='flight_game',  # correct database - add table with final scores.
+    database='flight_game',
     user="root",
     password="12332167",
     autocommit=True
 )
 
-
-# VARIABLES
-
-playerId = functions.playerIdGen()  # applying unique id for player from generator
-playerName = " "
-playerCredits = 10000  # starting balance
-playerVisited = 1
-# Set of countries codes to prevent double counting, correlating with starting position
-playerVisitedSet = {"BE"}
-playerPosition = "EBBR"  # Starting position
-playerGoal = 5  # countries to visit ! change
-
-weatherPenalty = 200  # in credits cr
-weatherCheck = 50  # in credits cr
-
-
-# BACKEND START
-# FLASK
-
-app = Flask(__name__)
-
-# Backend functions EXAMPLE!!
-
-
-@app.route('/prime_check/<number>')
-def getInfo():
-    sql = "SELECT ident,municipality,iso_country from airport where continent ='EU' and type = 'large_airport' "
-    # print(sql)
-    cursor = connection.cursor()
-    cursor.execute(sql)
-    result = cursor.fetchall()
-    print("List of airports:")
-    for x in result:
-        print("Country:", x[2], " ", "Id:", x[0], " ", "Municipality:", x[1])
-    return
-
+# FUNCTIONS --------------------------------------------------------------------------
 
 # info (information about available destinations)
 
-@app.route('/airport/<icao>')
-def airport_check(icao):
-    sql = "SELECT name, municipality from airport where ident ='" + icao + "'"
-    cursor = connection.cursor()
-    cursor.execute(sql)
-    response1 = cursor.fetchall()
-    for i in response1:
-        name = i[0]
-        location = i[1]
-    response = '{"ICAO":"'+icao+'", "Name":"' + \
-        name+'", "Location":"'+location+'"}'
-    return response
 
-
-@app.route('/get_info')
 def getInfo():
     sql = "SELECT ident,municipality,iso_country from airport where continent ='EU' and type = 'large_airport' "
     # print(sql)
@@ -81,16 +37,6 @@ def getInfo():
     print("List of airports:")
     for x in result:
         print("Country:", x[2], " ", "Id:", x[0], " ", "Municipality:", x[1])
-    x = "44"
-    return x
-
-
-if __name__ == '__main__':
-    app.run(use_reloader=True, host='127.0.0.1', port=5000)
-
-# BACKEND END
-
-# FUNCTIONS --------------------------------------------------------------------------
 
 # status (printing information about current balance, position,visited countries)
 
@@ -149,6 +95,21 @@ def weather():
         landing = False
     return landing
 
+
+
+
+# VARIABLES for current game session-------------------------------------------------
+
+playerId = functions.playerIdGen()  # applying unique id for player from generator
+playerName = " "
+playerCredits = 10000  # starting balance
+playerVisited = 1
+playerVisitedSet = {"BE"}  # Set of countries codes to prevent double counting, correlating with starting position
+playerPosition = "EBBR"  # later change to random or chosen
+playerGoal = 5  # countries to visit
+
+weatherPenalty = 200  # in credits cr
+weatherCheck = 50  # in credits cr
 
 # BODY OF THE GAME --------------------------------------------------------------------
 menu.divider(2)

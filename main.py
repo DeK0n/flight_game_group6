@@ -2,12 +2,13 @@
 from modules import menu, functions
 from geopy import distance
 import mysql.connector
-import random
 from flask import Flask, request
+from flask_cors import CORS         # this is needed if you want JavaScript access
 import math
 import json
+import random
 
-# CONNECTION TO DATABASE - use your user and password, host can be localhost or 127.0.0.0
+# CONNECTION TO DATABASE - !!! use your user and password, host can be localhost or 127.0.0.0
 
 connection = mysql.connector.connect(
     host='localhost',
@@ -23,7 +24,7 @@ connection = mysql.connector.connect(
 
 playerId = functions.playerIdGen()  # applying unique id for player from generator
 playerName = " "
-playerCredits = 10000  # starting balance
+playerCredits = 10000  # starting balance of CO2
 playerVisited = 1
 # Set of countries codes to prevent double counting, correlating with starting position
 playerVisitedSet = {"BE"}
@@ -34,28 +35,12 @@ weatherPenalty = 200  # in credits cr
 weatherCheck = 50  # in credits cr
 
 
-# BACKEND START
-# FLASK
+# FLASK ->
 
 app = Flask(__name__)
 
-# Backend functions EXAMPLE!!
+# check airport by ICAO
 
-
-@app.route('/prime_check/<number>')
-def getInfo():
-    sql = "SELECT ident,municipality,iso_country from airport where continent ='EU' and type = 'large_airport' "
-    # print(sql)
-    cursor = connection.cursor()
-    cursor.execute(sql)
-    result = cursor.fetchall()
-    print("List of airports:")
-    for x in result:
-        print("Country:", x[2], " ", "Id:", x[0], " ", "Municipality:", x[1])
-    return
-
-
-# info (information about available destinations)
 
 @app.route('/airport/<icao>')
 def airport_check(icao):
@@ -70,50 +55,43 @@ def airport_check(icao):
         name+'", "Location":"'+location+'"}'
     return response
 
+# info (information about available destinations)
+
 
 @app.route('/get_info')
 def getInfo():
+    # currently large airports in Europe
     sql = "SELECT ident,municipality,iso_country from airport where continent ='EU' and type = 'large_airport' "
-    # print(sql)
     cursor = connection.cursor()
     cursor.execute(sql)
-    result = cursor.fetchall()
-    print("List of airports:")
-    for x in result:
-        print("Country:", x[2], " ", "Id:", x[0], " ", "Municipality:", x[1])
-    x = "44"
-    return x
+    response = cursor.fetchall()
+    #response = sql.dumps(cursor.fetchall())
+    return response
 
-
-if __name__ == '__main__':
-    app.run(use_reloader=True, host='127.0.0.1', port=5000)
-
-# BACKEND END
-
-# FUNCTIONS --------------------------------------------------------------------------
 
 # status (printing information about current balance, position,visited countries)
 
-
+@app.route('/get_status')
 def getStatus():
-    print("Your curent status:")
-    print("Credits: "+str(playerCredits))
-    print("Visited countries: "+str(playerVisited)+" : "+str(playerVisitedSet))
-    print("Current position: "+str(playerPosition))
+    response = '{"co2":"'+str(playerCredits)+'", ""visitedNumber:"' + str(playerVisited)+'", "visitedList":"' + \
+        str(playerVisitedSet)+'", "position":"' + \
+        str(playerPosition)+'"}'  # modify format to json
+    return response
 
 # position (select position from database)
 
-
+@app.route('/get_position/<ICAO>')
 def getPosition(icao):
     sql = "SELECT latitude_deg, longitude_deg from airport where ident ='" + icao + "'"
     # print(sql)
     cursor = connection.cursor()
     cursor.execute(sql)
-    return cursor.fetchall()
+    response = cursor.fetchall()
+    return response
 
 # country code (select from airport database)
 
-
+@app.route('/get_countrycode/<ICAO>')
 def getCountryCode(icao):
     sql = "SELECT iso_country from airport where ident ='" + icao + "'"
     # print(sql)
@@ -126,107 +104,32 @@ def getCountryCode(icao):
 
 # distance (calculating distance between points)
 
-
+@app.route('/get_countrycode/<ICAO>')
 def getDistance(playerPosition, playerDestination):
     icao = playerPosition
     a = getPosition(icao)[0]
     icao = playerDestination
     b = getPosition(icao)[0]
     #print(a, b)
-    return round((distance.distance(a, b).km), 0)  # distance in km rounded
-
+    response = round((distance.distance(a, b).km), 0)  # distance in km rounded
+    return response
 
 # random weather function
 
-
-def weather():
+@app.route('/random')
+def randomGenerator80():
     import random
     x = random.randint(0, 100)
-    # current chance of bad weather is set to 20%
     if x <= 80:
-        landing = True
+        response = "True" #in string form, change to needed form
     else:
-        landing = False
-    return landing
+        response = "False"
+    return response
+
+# flask finish statement, all requests are above
+if __name__ == '__main__':
+    app.run(use_reloader=True, host='127.0.0.1', port=5000)
+
+#  <- FLASK
 
 
-# BODY OF THE GAME --------------------------------------------------------------------
-menu.divider(2)
-menu.pictureAircraft1()
-playerName = input("Enter your name: ")
-menu.greetings()
-
-menu.commands()
-print("Your starting point is Brusseles, Belgium (EBBR)")
-
-while playerVisited != playerGoal and playerCredits > 0:
-    menu.divider(1)
-    command = input("Enter command: ")
-    condition = weather()
-    playerDestination = " "
-
-    if command == "check":
-        print("You were charged "+str(weatherCheck)+" cr for checking weather")
-        playerCredits = playerCredits-weatherCheck  # paying for checking weather
-        checkDestination = input("Enter airport code to check weather: ")
-        if condition == False:
-            menu.messageBadWeather()
-            command = "again"
-        else:
-            print('The weather is good.')
-            commandCheck = input(
-                'Fly there? Type "yes" to fly or "no" to choose another command: ')
-            if commandCheck == "yes":
-                playerDestination = checkDestination
-                command = "fly"
-            elif commandCheck == "no":
-                command = "again"
-            else:
-                # wrongcommand is not in command list so it goes to else statement
-                command = "wrongcommand"
-
-    if command == "fly":
-        if playerDestination == " ":
-            # add what happens if wrong code , add restriction to travel outside available list
-            playerDestination = input("Enter destination code: ")
-        icao = playerDestination
-        playerDestinationCountry = getCountryCode(icao)
-
-        if condition == True:  # if weather
-            ticket = getDistance(playerPosition, playerDestination)
-            # paying for flight + ADD inability to pay more than player has
-            playerCredits = playerCredits-ticket
-            playerPosition = playerDestination  # changing current position
-
-            if playerDestinationCountry not in playerVisitedSet:  # if visited this country
-                playerVisited = playerVisited+1  # country counter
-                playerVisitedSet.add(playerDestinationCountry)  # visited list
-            print("You successfully got to destination point of " +
-                  str(playerPosition)+". You've spent "+str(ticket)+" credits.")
-        else:
-            playerCredits = playerCredits-weatherPenalty
-            print("Destination is closed due to weather, you were penaltied " +
-                  str(weatherPenalty)+"credits and stayed at "+str(playerPosition)+".")
-    elif command == "info":
-        getInfo()
-    elif command == "status":
-        getStatus()
-    elif command == "commands":
-        menu.commands()
-    elif command == "again":
-        menu.messageReturning()
-    elif command == "exit":
-        menu.messageStop()
-        menu.divider(2)
-        break
-    else:
-        menu.messageWrong()
-
-if playerVisited >= playerGoal:
-    # add name, id, and score to database
-    print("You finished the game. Final status is:")
-    getStatus()
-    menu.divider(2)
-elif playerCredits <= 0:
-    menu.messageNoMoney(playerCredits)
-    menu.divider(2)

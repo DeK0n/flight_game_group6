@@ -37,14 +37,14 @@ class Player:
         self.id = functions.playerIdGen()
 
 
-getName = "Enter your name"
-player1 = Player(getName, 15000, "EBBR")
+getName = "Enter your name" # this name is showed on screen before player have entered name
+player1 = Player(getName, 15000, "EBBR") 
 player2 = Player("Opponent", 15000, "EBBR")
 
 
 # FUNCTIONS
 
-
+# real weather fetcher !!!!!!!!!!!!!!!!!! add somehow to the game!!!!!!!!!!!!!!!!!!!
 # def getTemperature(municipality):
 #     cityName = municipality
 #     request = "https://api.openweathermap.org/data/2.5/weather?q=" + \
@@ -53,6 +53,7 @@ player2 = Player("Opponent", 15000, "EBBR")
 #     response = requests.get(request).json()
 #     return response["main"]["temp"]
 
+# random weather condition (sun,clouds,rain)
 
 def randomizeWeather():
     x = random.randint(0, 100)
@@ -64,6 +65,8 @@ def randomizeWeather():
         weather = "rain"
     return weather
 
+# get position latitude and longitude from icao
+
 
 def getPosition(icao):
     sql = "SELECT latitude_deg, longitude_deg from airport where ident ='" + icao + "'"
@@ -71,12 +74,16 @@ def getPosition(icao):
     cursor.execute(sql)
     return cursor.fetchall()
 
+# get distance from icao of player position to selected icao
+
 
 def getDistance(icao):
     a = getPosition(player1.position)[0]
     b = getPosition(icao)[0]
     # print(a, b)
     return round((distance.distance(a, b).km), 0)  # distance in km rounded
+
+# get list of dictionaries with airports
 
 
 def getAirports():
@@ -93,19 +100,22 @@ def getAirports():
         airportList.append(airport)
     return airportList
 
+# modify player data on each game loop
+
 
 def modifyPlayer(player1Destination):
     def getDistance():
         for i in airportList:
             if i["icao"] == player1Destination:
-                return(i["distance"])
+                return (i["distance"])
+
     def getWeather():
         for i in airportList:
             if i["icao"] == player1Destination:
-                return(i["weather"])
+                return (i["weather"])
     distance = getDistance()
     weather = getWeather()
-    player1.co2 = player1.co2-distance
+    player1.co2 = player1.co2-distance  # subtracting distance from co2 budjet
 
     if weather == "sun":
         votingCoefficient = 1.25
@@ -114,28 +124,29 @@ def modifyPlayer(player1Destination):
     elif weather == "rain":
         votingCoefficient = 0.75
     else:
-        votingCoefficient = 1
+        votingCoefficient = 1 #voting coefficient based on weather
+
     if player1.co2 < 0:
-        player1.co2Coefficient = 0.9
+        player1.co2Coefficient = 0.9 #co2 coefficient to calc final - add to final calculations !!!!!!!!!!!!!!
 
     player1.votes = player1.votes + \
-        round((random.randint(350, 500)*votingCoefficient))
+        round((random.randint(350, 500)*votingCoefficient)) # calculating votes on each step mb add co2coefficient right here? !!!!!
 
-    player1.position = player1Destination
+    player1.position = player1Destination # changing destination to current
 
-
+#modify opponent each game loop - make more complicated with flying to different random airports!!!!!
 def modifyOpponent():
     player2.votes += 425
     x = (random.randint(750, 1350))
     player2.co2 = player2.co2-x
 
-
+#combine player info to send to fromtend
 def getPlayer():
     response = {"name": player1.name, "id": player1.id, "co2": player1.co2,
                 "position": player1.position, "c02coefficient": player1.co2Coefficient, "votes": player1.votes}
     return response
 
-
+#compbine opponent info to send to forntend
 def getOpponent():
     response = {"name": player2.name, "id": player2.id, "co2": player2.co2,
                 "position": player2.position, "c02coefficient": player2.co2Coefficient, "votes": player2.votes}
@@ -145,30 +156,29 @@ def getOpponent():
 # Game
 getAirports()
 
-
 # FLASK ->
 
 app = Flask(__name__)
 
 
-@ app.route('/name-update/<name>')
+@ app.route('/name-update/<name>') # for changing name
 def nameUpdate(name):
     player1.name = name
-    a=getAirports()
-    b=getPlayer()
-    c=getOpponent()
-    response = "'"+str(a)+", "+ str(b)+", "+ str(c)+"'"
+    a = getAirports()
+    b = getPlayer()
+    c = getOpponent()
+    response = "'"+str(a)+", " + str(b)+", " + str(c)+"'"
     return response
 
 
-@ app.route('/info-update/<player1Destination>')
+@ app.route('/info-update/<player1Destination>') # each game loop update based on plaer selected destination
 def infoUpdate(player1Destination):
     modifyPlayer(player1Destination)
     modifyOpponent()
-    a=getAirports()
-    b=getPlayer()
-    c=getOpponent()
-    response = "'"+str(a)+", "+ str(b)+", "+ str(c)+"'"
+    a = getAirports() #airports data
+    b = getPlayer() #player info
+    c = getOpponent() #opponent info
+    response = "'"+str(a)+", " + str(b)+", " + str(c)+"'"
     return response
 
 

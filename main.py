@@ -22,183 +22,135 @@ connection = mysql.connector.connect(
 
 
 # VARIABLES
-
-playerId = functions.playerIdGen()  # applying unique id for player from generator
-playerName = " "
-playerCredits = 10000  # starting balance of CO2
-playerVisited = 1
-# Set of countries codes to prevent double counting, correlating with starting position
-playerVisitedSet = {"BE"}
-playerPosition = "EBBR"  # Starting position
-playerGoal = 5  # countries to visit ! change
-
-weatherPenalty = 200  # in credits cr
-weatherCheck = 50  # in credits cr
-
-# FUNCTIONS FROM old version - some still in use
-
-# weather rquest from openweather API - remake to @app.route
-cityName = input("Enter city name: ")
-request = "https://api.openweathermap.org/data/2.5/weather?q=" + \
-    cityName+"&appid={APIkey}&units=metric" # paste your openweathermap api key where {APIkey} without brackets
-response1234 = requests.get(request).json()
-print("Weather conditions in "+str(cityName)+": ")
-print(str(response1234["weather"][0]["description"])+" and "+ str(response1234["main"]["temp"])+" C")
-
-# info (information about available destinations)
+airportList = []
+distanceToCurrent = 0
 
 
-def getInfo():
-    sql = "SELECT ident,municipality,iso_country from airport where continent ='EU' and type = 'large_airport' "
-    # print(sql)
-    cursor = connection.cursor()
-    cursor.execute(sql)
-    result = cursor.fetchall()
-    print("List of airports:")
-    for x in result:
-        print("Country:", x[2], " ", "Id:", x[0], " ", "Municipality:", x[1])
-
-# status (printing information about current balance, position,visited countries)
+class Player:
+    def __init__(self, name, co2, position, co2Coefficient=1, votes=0) -> None:
+        self.name = name
+        self.id = id
+        self.co2 = co2  # starting balance of CO2
+        self.position = position
+        self.co2Coefficient = co2Coefficient
+        self.votes = votes
+        self.id = functions.playerIdGen()  # applying unique id for player from generator
 
 
-def getStatus():
-    print("Your curent status:")
-    print("Credits: "+str(playerCredits))
-    print("Visited countries: "+str(playerVisited)+" : "+str(playerVisitedSet))
-    print("Current position: "+str(playerPosition))
+getName = "Enter your name"
+player1 = Player(getName, 10000, "EBBR")
+player2 = Player("Opponent", 10000, "EBBR")
 
-# position (select position from database)
+# FUNCTIONS
+
+
+def getTemperature(municipality):
+    cityName = municipality
+    request = "https://api.openweathermap.org/data/2.5/weather?q=" + \
+        cityName + \
+        "&appid={APIkey}&units=metric"  # paste your openweathermap api key where {APIkey} without brackets
+    response = requests.get(request).json()
+    return response["main"]["temp"]
+
+
+def randomizeWeather():
+    x = random.randint(0, 100)
+    if x <= 100 and x > 66:
+        weather = "sun"
+    elif x <= 66 and x > 33:
+        weather = "clouds"
+    else:
+        weather = "rain"
+    return weather
 
 
 def getPosition(icao):
     sql = "SELECT latitude_deg, longitude_deg from airport where ident ='" + icao + "'"
-    # print(sql)
     cursor = connection.cursor()
     cursor.execute(sql)
     return cursor.fetchall()
 
-# country code (select from airport database)
 
-
-def getCountryCode(icao):
-    sql = "SELECT iso_country from airport where ident ='" + icao + "'"
-    # print(sql)
-    cursor = connection.cursor()
-    cursor.execute(sql)
-    country = cursor.fetchall()
-    for y in country:
-        countrycode = (y[0])
-        return countrycode
-
-# distance (calculating distance between points)
-
-
-def getDistance(playerPosition, playerDestination):
-    icao = playerPosition
-    a = getPosition(icao)[0]
-    icao = playerDestination
+def getDistance(icao):
+    a = getPosition(player1.position)[0]
     b = getPosition(icao)[0]
     #print(a, b)
     return round((distance.distance(a, b).km), 0)  # distance in km rounded
 
 
-# random weather function
+def getAirports():
+    icaoList = ["LOWW", "EBBR", "LBSF", "LDZA", "LKPR", "EKCH", "EETN", "EFHK", "LFPG", "EDDB", "LGAV", "LHBP", "EIDW",
+                "LIRF", "EVRA", "EYVI", "ELLX", "LMML", "EHAM", "EPWA", "LPPT", "LROP", "LZIB", "LJLJ", "LEMD", "ESSA", "LCLK"]
+    for i in icaoList:
+        sql = "SELECT ident, latitude_deg, longitude_deg, iso_country, municipality from airport where ident ='"+i+"'"
+        # print(sql)
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        result = cursor.fetchall()
+        airport = {"icao": result[0][0], "latitude": result[0][1],
+                   "longitude": result[0][2], "country": result[0][3], "city": result[0][4], "temperature": getTemperature(result[0][4]), "weather": randomizeWeather(), "distance": getDistance(result[0][0])}
+        airportList.append(airport)
+    return airportList
 
 
-def weather():
-    import random
-    x = random.randint(0, 100)
-    # current chance of bad weather is set to 20%
-    if x <= 80:
-        landing = True
-    else:
-        landing = False
-    return landing
+def modifyPlayer(player1Destination):
+    player1.position = player1Destination
 
-# FLASK ->
+    for i in airportList:
+        if i["icao"] == player1Destination:
+            distance = i["distance"]
+            weather = i["weather"]
+        
+            player1.co2 = player1.co2-distance
 
+            if player1.co2 < 0:
+                player1.co2Coefficient = 0.9
+
+            if weather == "sun":
+                votingCoefficient = 1.25
+            elif weather == "clouds":
+                votingCoefficient = 1
+            elif weather == "rain":
+                votingCoefficient = 0.75
+            else:
+                votingCoefficient = 1
+
+            player1.votes = player1.votes + \
+                round((random.randint(350, 500)*votingCoefficient))
+
+def modifyOpponent():
+    player2.votes += 425
+
+def getPlayer():
+    response = {"name":player1.name,"id":player1.id,"co2":player1.co2,"position":player1.position,"c02coefficient":player1.co2Coefficient,"votes":player1.votes}
+    return response
+
+def getOpponent():
+    response = {"name":player2.name,"id":player2.id,"co2":player2.co2,"position":player2.position,"c02coefficient":player2.co2Coefficient,"votes":player2.votes}
+    return response
+
+
+# # FLASK ->
 
 app = Flask(__name__)
 
 
-@app.route('/airport/<icao>')  # check airport by ICAO
-def airport_check(icao):
-    sql = "SELECT name, municipality from airport where ident ='" + icao + "'"
-    cursor = connection.cursor()
-    cursor.execute(sql)
-    response1 = cursor.fetchall()
-    for i in response1:
-        name = i[0]
-        location = i[1]
-    response = '{"ICAO":"'+icao+'", "Name":"' + \
-        name+'", "Location":"'+location+'"}'
+@app.route('/name-update/<name>')
+def nameUpdate(name):
+    player1.name = name
+    response = [getAirports(), player1, player2]
     return response
 
 
-@app.route('/get_info')  # info (information about available destinations)
-def getInfo():
-    # currently large airports in Europe
-    sql = "SELECT ident,municipality,iso_country from airport where continent ='EU' and type = 'large_airport' "
-    cursor = connection.cursor()
-    cursor.execute(sql)
-    response = cursor.fetchall()
-    #response = sql.dumps(cursor.fetchall())
+@app.route('/info-update/<player1Destination>')
+def infoUpdate(player1Destination):
+    modifyPlayer(player1Destination)
+    modifyOpponent()
+    response = [getAirports(), getPlayer(), getOpponent()]
     return response
 
 
-# status (printing information about current balance, position,visited countries)
-@app.route('/get_status')
-def getStatus():
-    response = '{"co2":"'+str(playerCredits)+'", ""visitedNumber:"' + str(playerVisited)+'", "visitedList":"' + \
-        str(playerVisitedSet)+'", "position":"' + \
-        str(playerPosition)+'"}'  # modify format to json
-    return response
-
-
-@app.route('/get_position/<ICAO>')  # position (select position from database)
-def getPosition(icao):
-    sql = "SELECT latitude_deg, longitude_deg from airport where ident ='" + icao + "'"
-    # print(sql)
-    cursor = connection.cursor()
-    cursor.execute(sql)
-    response = cursor.fetchall()
-    return response
-
-
-# country code (select from airport database)
-@app.route('/get_countrycode/<ICAO>')
-def getCountryCode(icao):
-    sql = "SELECT iso_country from airport where ident ='" + icao + "'"
-    # print(sql)
-    cursor = connection.cursor()
-    cursor.execute(sql)
-    country = cursor.fetchall()
-    for y in country:
-        countrycode = (y[0])
-        return countrycode
-
-
-# distance (calculating distance between points)
-@app.route('/get_distance/<icao1>%<icao2>')
-def getDistance(icao1, icao2):
-    a = getPosition(icao1)[0]
-    b = getPosition(icao2)[0]
-    response = round((distance.distance(a, b).km), 0)  # distance in km rounded
-    return response
-
-
-@app.route('/random')  # random function set to 80%
-def randomGenerator80():
-    import random
-    x = random.randint(0, 100)
-    if x <= 80:
-        response = "True"  # in string form, change to needed form
-    else:
-        response = "False"
-    return response
-
-
-# flask finish statement, all requests are above
 if __name__ == '__main__':
     app.run(use_reloader=True, host='127.0.0.1', port=5000)
+
 #  <- FLASK

@@ -37,7 +37,7 @@ function updateStatus(status) {
     document.querySelector('#number_of_place_visited').innerHTML = status.countries_visited;
 
 }
-
+a
 // function to show weather at selected airport
 function showWeather() {
     document.querySelector('airport-name').innerHTML = `Weather at ${airport.name};`

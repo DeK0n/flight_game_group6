@@ -14,7 +14,7 @@ import requests
 connection = mysql.connector.connect(
     host='localhost',
     port=3306,
-    database='flight_game',  
+    database='flight_game',
     user="root",
     password="12332167",
     autocommit=True
@@ -30,11 +30,11 @@ class Player:
     def __init__(self, name, co2, position, co2Coefficient=1, votes=0) -> None:
         self.name = name
         self.id = id
-        self.co2 = co2  
+        self.co2 = co2
         self.position = position
         self.co2Coefficient = co2Coefficient
         self.votes = votes
-        self.id = functions.playerIdGen() 
+        self.id = functions.playerIdGen()
 
 
 getName = "Enter your name"
@@ -95,8 +95,16 @@ def getAirports():
 
 
 def modifyPlayer(player1Destination):
-    distance = 0
-    weather = " "
+    def getDistance():
+        for i in airportList:
+            if i["icao"] == player1Destination:
+                return(i["distance"])
+    def getWeather():
+        for i in airportList:
+            if i["icao"] == player1Destination:
+                return(i["weather"])
+    distance = getDistance()
+    weather = getWeather()
     player1.co2 = player1.co2-distance
 
     if weather == "sun":
@@ -107,7 +115,6 @@ def modifyPlayer(player1Destination):
         votingCoefficient = 0.75
     else:
         votingCoefficient = 1
-
     if player1.co2 < 0:
         player1.co2Coefficient = 0.9
 
@@ -115,6 +122,7 @@ def modifyPlayer(player1Destination):
         round((random.randint(350, 500)*votingCoefficient))
 
     player1.position = player1Destination
+
 
 def modifyOpponent():
     player2.votes += 425
@@ -134,7 +142,11 @@ def getOpponent():
     return response
 
 
-# # FLASK ->
+# Game
+getAirports()
+
+
+# FLASK ->
 
 app = Flask(__name__)
 
@@ -142,7 +154,10 @@ app = Flask(__name__)
 @ app.route('/name-update/<name>')
 def nameUpdate(name):
     player1.name = name
-    response = [getAirports(), getPlayer(), getOpponent()]
+    a=getAirports()
+    b=getPlayer()
+    c=getOpponent()
+    response = "'"+str(a)+", "+ str(b)+", "+ str(c)+"'"
     return response
 
 

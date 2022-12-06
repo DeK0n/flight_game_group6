@@ -3,7 +3,7 @@ from modules import menu, functions
 from geopy import distance
 import mysql.connector
 from flask import Flask, request
-from flask_cors import CORS         # this is needed if you want JavaScript access
+from flask_cors import CORS
 import math
 import json
 import random
@@ -14,7 +14,7 @@ import requests
 connection = mysql.connector.connect(
     host='localhost',
     port=3306,
-    database='flight_game',  # correct database - add table with final scores.
+    database='flight_game',  
     user="root",
     password="12332167",
     autocommit=True
@@ -30,16 +30,16 @@ class Player:
     def __init__(self, name, co2, position, co2Coefficient=1, votes=0) -> None:
         self.name = name
         self.id = id
-        self.co2 = co2  # starting balance of CO2
+        self.co2 = co2  
         self.position = position
         self.co2Coefficient = co2Coefficient
         self.votes = votes
-        self.id = functions.playerIdGen()  # applying unique id for player from generator
+        self.id = functions.playerIdGen() 
 
 
 getName = "Enter your name"
-player1 = Player(getName, 10000, "EBBR")
-player2 = Player("Opponent", 10000, "EBBR")
+player1 = Player(getName, 15000, "EBBR")
+player2 = Player("Opponent", 15000, "EBBR")
 
 
 # FUNCTIONS
@@ -75,7 +75,7 @@ def getPosition(icao):
 def getDistance(icao):
     a = getPosition(player1.position)[0]
     b = getPosition(icao)[0]
-    #print(a, b)
+    # print(a, b)
     return round((distance.distance(a, b).km), 0)  # distance in km rounded
 
 
@@ -95,39 +95,42 @@ def getAirports():
 
 
 def modifyPlayer(player1Destination):
+    distance = 0
+    weather = " "
+    player1.co2 = player1.co2-distance
+
+    if weather == "sun":
+        votingCoefficient = 1.25
+    elif weather == "clouds":
+        votingCoefficient = 1
+    elif weather == "rain":
+        votingCoefficient = 0.75
+    else:
+        votingCoefficient = 1
+
+    if player1.co2 < 0:
+        player1.co2Coefficient = 0.9
+
+    player1.votes = player1.votes + \
+        round((random.randint(350, 500)*votingCoefficient))
+
     player1.position = player1Destination
-
-    for i in airportList:
-        if i["icao"] == player1Destination:
-            distance = i["distance"]
-            weather = i["weather"]
-        
-            player1.co2 = player1.co2-distance
-
-            if player1.co2 < 0:
-                player1.co2Coefficient = 0.9
-
-            if weather == "sun":
-                votingCoefficient = 1.25
-            elif weather == "clouds":
-                votingCoefficient = 1
-            elif weather == "rain":
-                votingCoefficient = 0.75
-            else:
-                votingCoefficient = 1
-
-            player1.votes = player1.votes + \
-                round((random.randint(350, 500)*votingCoefficient))
 
 def modifyOpponent():
     player2.votes += 425
+    x = (random.randint(750, 1350))
+    player2.co2 = player2.co2-x
+
 
 def getPlayer():
-    response = {"name":player1.name,"id":player1.id,"co2":player1.co2,"position":player1.position,"c02coefficient":player1.co2Coefficient,"votes":player1.votes}
+    response = {"name": player1.name, "id": player1.id, "co2": player1.co2,
+                "position": player1.position, "c02coefficient": player1.co2Coefficient, "votes": player1.votes}
     return response
 
+
 def getOpponent():
-    response = {"name":player2.name,"id":player2.id,"co2":player2.co2,"position":player2.position,"c02coefficient":player2.co2Coefficient,"votes":player2.votes}
+    response = {"name": player2.name, "id": player2.id, "co2": player2.co2,
+                "position": player2.position, "c02coefficient": player2.co2Coefficient, "votes": player2.votes}
     return response
 
 
@@ -136,18 +139,21 @@ def getOpponent():
 app = Flask(__name__)
 
 
-@app.route('/name-update/<name>')
+@ app.route('/name-update/<name>')
 def nameUpdate(name):
     player1.name = name
-    response = [getAirports(), player1, player2]
+    response = [getAirports(), getPlayer(), getOpponent()]
     return response
 
 
-@app.route('/info-update/<player1Destination>')
+@ app.route('/info-update/<player1Destination>')
 def infoUpdate(player1Destination):
     modifyPlayer(player1Destination)
     modifyOpponent()
-    response = [getAirports(), getPlayer(), getOpponent()]
+    a=getAirports()
+    b=getPlayer()
+    c=getOpponent()
+    response = "'"+str(a)+", "+ str(b)+", "+ str(c)+"'"
     return response
 
 

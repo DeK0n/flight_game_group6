@@ -41,16 +41,17 @@ getName = "Enter your name"
 player1 = Player(getName, 10000, "EBBR")
 player2 = Player("Opponent", 10000, "EBBR")
 
+
 # FUNCTIONS
 
 
-def getTemperature(municipality):
-    cityName = municipality
-    request = "https://api.openweathermap.org/data/2.5/weather?q=" + \
-        cityName + \
-        "&appid={APIkey}&units=metric"  # paste your openweathermap api key where {APIkey} without brackets
-    response = requests.get(request).json()
-    return response["main"]["temp"]
+# def getTemperature(municipality):
+#     cityName = municipality
+#     request = "https://api.openweathermap.org/data/2.5/weather?q=" + \
+#         cityName + \
+#         "&appid={APIkey}&units=metric"  # paste your openweathermap api key where {APIkey} without brackets
+#     response = requests.get(request).json()
+#     return response["main"]["temp"]
 
 
 def randomizeWeather():
@@ -88,7 +89,7 @@ def getAirports():
         cursor.execute(sql)
         result = cursor.fetchall()
         airport = {"icao": result[0][0], "latitude": result[0][1],
-                   "longitude": result[0][2], "country": result[0][3], "city": result[0][4], "temperature": getTemperature(result[0][4]), "weather": randomizeWeather(), "distance": getDistance(result[0][0])}
+                   "longitude": result[0][2], "country": result[0][3], "city": result[0][4], "weather": randomizeWeather(), "distance": getDistance(result[0][0])}
         airportList.append(airport)
     return airportList
 

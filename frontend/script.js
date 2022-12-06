@@ -1,18 +1,18 @@
 'use strict';
-/* 1. show map using Leaflet library. (L comes from the Leaflet library) */
-const map = L.map('map', {tap: false});
-L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
-  maxZoom: 20,
-  subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
-}).addTo(map);
-map.setView([60, 24], 7);
+import {airports} from "./service/airports.js";
+import Map from "./service/integration.js";
 
-// global variables
+
+
+const brusselCoord = [50.901401519800004,
+                      4.48443984985]
+
+let map = new Map(airports, brusselCoord);
+
 
 const apiUrl ='http://127.0.0.1:5000/';
 const startLoc = 'EBBR';
 const countries_visited = [];
-const airportMarkers = L.featureGroup().addTo(map);
 
 // icons
 
@@ -21,12 +21,12 @@ const greenIcon = L.divIcon({className: 'green-icon'});
 
 
 // form for player name
-document.querySelector('#player-form').addEventListener('submit', function (evt){
-    evt.preventDefault();
-    const playerName = document.querySelector('#player-input').value;
-    document.querySelector('#player-modal').classList.add('hide');
-    gameSetup(`${apiUrl}newgame?player=${playerName}&loc=${startLoc}`);
-});
+//document.querySelector('#player-form').addEventListener('submit', function (evt){
+//    evt.preventDefault();
+//    const playerName = document.querySelector('#player-input').value;
+//    document.querySelector('#player-modal').classList.add('hide');
+//    gameSetup(`${apiUrl}newgame?player=${playerName}&loc=${startLoc}`);
+//});
 
 
 // function to update game status
@@ -37,7 +37,7 @@ function updateStatus(status) {
     document.querySelector('#number_of_place_visited').innerHTML = status.countries_visited;
 
 }
-a
+
 // function to show weather at selected airport
 function showWeather() {
     document.querySelector('airport-name').innerHTML = `Weather at ${airport.name};`

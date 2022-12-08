@@ -1,5 +1,4 @@
 # IMPORTS
-from modules import menu, functions
 from geopy import distance
 import mysql.connector
 from flask import Flask, request
@@ -34,7 +33,7 @@ class Player:
         self.position = position
         self.co2Coefficient = co2Coefficient
         self.votes = votes
-        self.id = functions.playerIdGen()
+        self.id = playerIdGen()
 
 
 getName = "Enter your name" # this name is showed on screen before player have entered name
@@ -53,6 +52,11 @@ player2 = Player("Opponent", 15000, "EBBR")
 #     response = requests.get(request).json()
 #     return response["main"]["temp"]
 
+#random id generator
+def playerIdGen():
+    import random
+    x = "id"+str(random.randint(1000, 9999))  # e.g. id7362
+    return x
 # random weather condition (sun,clouds,rain)
 
 def randomizeWeather():
@@ -156,7 +160,7 @@ def getOpponent():
 # Game
 getAirports()
 
-# FLASK ->
+# FLASK -------------------------------------->
 
 app = Flask(__name__)
 
@@ -185,4 +189,4 @@ def infoUpdate(player1Destination):
 if __name__ == '__main__':
     app.run(use_reloader=True, host='127.0.0.1', port=5000)
 
-#  <- FLASK
+#  <-------------------------------------- FLASK

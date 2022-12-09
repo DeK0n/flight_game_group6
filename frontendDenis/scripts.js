@@ -70,6 +70,12 @@ async function gameStart() {
 
   }
   opponentInfo = await getOpponent();
+  if (playerInfo) {
+    document.querySelector("#opponent-name").innerHTML = opponentInfo.name;
+    document.querySelector("#opponent-votes").innerHTML = opponentInfo.votes;
+    document.querySelector("#opponent-co2").innerHTML = opponentInfo.co2;
+
+  }
   airportsList = await getAirports();
 }
 function gameTurn() {

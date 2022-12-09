@@ -116,8 +116,7 @@ def modifyPlayer(player1Destination):  # modifing player data on each game loop
     player1.position = player1Destination  # changing destination to current
     print("**destination reached: "+str(player1.position))
     print("**weather in destination: "+str(weather))
-
-
+    
 def modifyOpponent():  # modify opponent each game loop - make more complicated with flying to different random airports!!!!!
     player2.votes += 425
     x = (random.randint(750, 1350))
@@ -158,48 +157,9 @@ airportList = getAirports()
 
 # FLASK -------------------------------------->
 
-<<<<<<< HEAD:main.py
-app = Flask(__name__)
-CORS(app)
-=======
->>>>>>> d8677c9187d8f2394669055794b0ca200acf8eb8:main2trang.py
 
 @app.route('/name-update/<name>')  # for changing name
 def nameUpdate(name):
-<<<<<<< HEAD:main.py
-    player1.name = name
-    response = getPlayer()
-    return response
-
-
-@ app.route('/player-update')
-def infoUpdate():
-    response = getPlayer()
-    return response
-
-@ app.route('/modify-players/<icao>')
-def infoUpdate(icao):
-    modifyPlayer(icao)
-    modifyOpponent()
-    
-@ app.route('/opponent-update')
-def infoUpdate():
-    response = getOpponent()
-    return response
-
-
-@ app.route('/airports-update')
-def infoUpdate():
-    response = airportList()
-    return response
-
-
-@ app.route('/test')
-def itesting():
-    response = '{"teststr":"OK", "testint":999, "testbool":true}'
-    print(response)
-    return response
-=======
   player1.name = name
   a = getAirports()
   b = getPlayer()
@@ -226,7 +186,6 @@ def infoUpdate(player1Destination):
     'opponent': c
   }
   return response
->>>>>>> d8677c9187d8f2394669055794b0ca200acf8eb8:main2trang.py
 
 
 if __name__ == '__main__':

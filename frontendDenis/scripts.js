@@ -3,13 +3,14 @@ const playerName = prompt("Enter your name:");
 let airportsList;
 let playerInfo;
 let opponentInfo;
-let destination = "ESSA"; // change to chosen by player
+let destinationIcao = "ESSA"; // change to chosen by player
+let jsonData;
 async function changeName() {
   try {
     const response = await fetch(
       `http://127.0.0.1:5000/name-update/${playerName}`
     );
-    const jsonData = await response.json();
+    jsonData = await response.json();
     console.log("data", jsonData);
   } catch (error) {
     console.log(error.message);
@@ -21,7 +22,7 @@ async function getOpponent() {
     const response = await fetch(
       'http://127.0.0.1:5000/opponent-update'
     );
-    const jsonData = await response.json();
+    jsonData = await response.json();
     console.log("data", jsonData);
   } catch (error) {
     console.log(error.message);
@@ -33,7 +34,7 @@ async function getAirports() {
     const response = await fetch(
       'http://127.0.0.1:5000/airports-update'
     );
-    const jsonData = await response.json();
+    jsonData = await response.json();
     console.log("data", jsonData);
   } catch (error) {
     console.log(error.message);
@@ -45,7 +46,7 @@ async function getPlayer() {
     const response = await fetch(
       'http://127.0.0.1:5000/player-update'
     );
-    const jsonData = await response.json();
+    jsonData = await response.json();
     console.log("data", jsonData);
   } catch (error) {
     console.log(error.message);
@@ -57,13 +58,16 @@ async function modifyOneTurn(destinationIcao) {
     const response = await fetch(
       `http://127.0.0.1:5000/modify-players/${destinationIcao}`
     );
-    const jsonData = await response.json();
+    jsonData = await response.json();
     console.log("data", jsonData);
   } catch (error) {
     console.log(error.message);
   }
   return jsonData;
 }
+
+
+
 
 function gameStart() {
   //first request to change name and get starting info
@@ -73,16 +77,18 @@ function gameStart() {
 }
 function gameTurn(){
   //modifications on each press of main button
-  modifyOneTurn(destination)
+  modifyOneTurn(destinationIcao)
   playerInfo = getPlayer();
   opponentInfo = getOpponent();
   airportsList = getAirports();
 }
 
+// game
 gameStart();
 console.log(playerInfo)
 gameTurn();
 console.log(playerInfo)
+
 // async function changeName() {
 //   console.log("asynchronous download begins");
 //   try {

@@ -177,6 +177,8 @@ def playerUpdate():
 def modifyUpdate(icao):
     modifyPlayer(icao)
     modifyOpponent()
+    turncount = '{"+turn":"1"}'
+    return turncount
     
 @ app.route('/opponent-update')
 def opponentUpdate():
@@ -186,7 +188,7 @@ def opponentUpdate():
 
 @ app.route('/airports-update')
 def airportsUpdate():
-    response = airportList()
+    response = airportList
     return response
 
 

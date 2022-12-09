@@ -188,7 +188,7 @@ def opponentUpdate():
 
 @ app.route('/airports-update')
 def airportsUpdate():
-    response = '{"airports":"not set"}'
+    response = airportList
     return response
 
 

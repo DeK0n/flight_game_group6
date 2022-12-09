@@ -14,11 +14,12 @@ connection = mysql.connector.connect(
     host='localhost',
     port=3306,
     database='flight_game',
-    user="root",
-    password="12332167",
+    user="trang",
+    password="trang123",
     autocommit=True
 )
-
+app = Flask(__name__)
+cors = CORS(app, resources={r"/*": {"origins": "*"}})
 # FUNCTIONS
 
 # real weather fetcher !!!!!!!!!!!!!!!!!! add somehow to the game!!!!!!!!!!!!!!!!!!!
@@ -156,30 +157,35 @@ airportList = getAirports()
 
 # FLASK -------------------------------------->
 
-app = Flask(__name__)
 
-
-@ app.route('/name-update/<name>')  # for changing name
+@app.route('/name-update/<name>')  # for changing name
 def nameUpdate(name):
-    player1.name = name
-    a = getPlayer()
-    b = getOpponent()
-    c = airportList
-    print(player1.position)
-    response = "'"+str(a)+", " + str(b)+", " + str(c)+"'"
-    return response
+  player1.name = name
+  a = getAirports()
+  b = getPlayer()
+  c = getOpponent()
+  response = {
+    'airport': a,
+    'player': b,
+    'opponent': c
+  }
+  return response
 
 
 # each game loop updating based on player selected destination
-@ app.route('/info-update/<player1Destination>')
+@app.route('/info-update/<player1Destination>')
 def infoUpdate(player1Destination):
-    modifyPlayer(player1Destination)
-    modifyOpponent()
-    a = getPlayer()  # player info
-    b = getOpponent()  # opponent info
-    c = airportList  # airports data
-    response = "'"+str(a)+", " + str(b)+", " + str(c)+"'"
-    return response
+  modifyPlayer(player1Destination)
+  modifyOpponent()
+  a = getAirports()  # airports data
+  b = getPlayer()  # player info
+  c = getOpponent()  # opponent info
+  response = {
+    'airport': a,
+    'player': b,
+    'opponent': c
+  }
+  return response
 
 
 if __name__ == '__main__':

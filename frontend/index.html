@@ -11,7 +11,6 @@
     <script nomodule src="https://cdn.jsdelivr.net/npm/ionicons/dist/ionicons/ionicons.js" defer></script>
     <script type="module" src="./service/airports.js"></script>
     <script type="module" src="./service/integration.js"></script>
-
     <script type="module" src="script.js" defer></script>
     <title>G6 Flight Simulator</title>
 </head>
@@ -38,89 +37,112 @@
     </header>
 
     <section>
-        <div class="container">
-            <figure>
-                <img class="lead-img" src="businessjet.png" alt="Header image">
-                <figcaption></figcaption>
-            </figure>
-        </div>
-    </section>
+        <section>
+            <div class="container">
+                <figure>
+                    <figcaption></figcaption>
+                </figure>
+            </div>
+        </section>
 
 
-    <main class="flex-wrap">
-        <div id="map">
-        </div>
-        <div class="boxes">
-            <section class="box">
-                <header>
-                    <h2>Game status</h2>
-                </header>
-                <table border="1">
-                    <tr>
-                        <td colspan="2">
-                            <h3 id="player-name">Player Name</h3>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Days until election:</td>
-                        <td>14 days</td>
-                    </tr>
-                    <tr>
-                        <td>Election status:</td>
-                        <td>votes</td>
-                    </tr>
-                    <tr>
-                        <td>Election status opponent:</td>
-                        <td>votes</td>
-                    </tr>
-                    <tr>
-                        <td>CO2 status:</td>
-                        <td><span id="consumed">999</span>kg</td>
-                    </tr>
-                </table>
-            </section>
+        <main class="flex-wrap">
+            <div id="map">
+            </div>
+            <div class="boxes">
+                <section class="box">
+                    <header>
+                        <h2>Game status</h2>
+                    </header>
+                    <table border="1">
+                        <tr>
+                            <td><h3>Player:</h3></td>
+                            <td>
+                                <h3 id="player-name">Player name</h3>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Days until election:</td>
+                            <td id="days-left">7 days</td>
+                        </tr>
+                        <tr>
+                            <td>Election status:</td>
+                            <td id="player-votes">votes</td>
+                        </tr>
+                        <tr>
+                            <td>CO2 status:</td>
+                            <td><span id="player-co2">0</span>kg</td>
+                        </tr>
+                    </table>
+                </section>
 
-            <section class="box">
-                <header>
-                    <h2>Next destination:</h2>
-                </header>
-                <table border="1" class="weather">
-                    <tr>
-                        <td id="airport-name">City name:</td>
-                        <td>Paris</td>
-                    </tr>
-                    <tr>
-                        <td>Weather:</td>
-                        <td><img id="weather-icon" src="https://openweathermap.org/img/wn/10d@2x.png"
-                                 alt="Current weather">
-                            <p id="airport-conditions"></p>Cloudy
-                        </td>
-                    </tr>
-                    <td>Temperature</td>
+                <section class="box">
+                    <header>
+                        <h2>Opponent's status</h2>
+                    </header>
+                    <table border="1">
+                        <tr>
+                            <td><h3>Opponent:</h3></td>
+                            <td>
+                                <h3>Bot1</h3>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Opponent's election status:</td>
+                            <td id=opponent-votes">votes</td>
+                        </tr>
+                        <tr>
+                            <td>Opponent's c02 status:</td>
+                            <td><span id="opponent-co2">0</span>kg</td>
+                        </tr>
+                    </table>
+                </section>
 
-                    <td id="airport-temp">10°C</td>
-                    <tr>
-                        <td>Distance to next destination:</td>
-                        <td><span id="distance">999</span>km</td>
-                    </tr>
-                </table>
-            </section>
-            <section>
-                <button class="confirm-button button button-white">Confirm flight</button>
-            </section>
-        </div>
-    </main>
-    <footer class="page-footer">
-        <p>@G6 copyright</p>
-    </footer>
+
+                <section class="box">
+                    <header>
+                        <h2>Next destination:</h2>
+                    </header>
+                    <table border="1" class="weather">
+                        <tr>
+                            <td>City name:</td>
+                            <td id="airport-name"></td>
+                        </tr>
+                        <tr>
+                            <td>Weather:</td>
+                            <td><img id="weather-icon" src="https://openweathermap.org/img/wn/10d@2x.png"
+                                     alt="Current weather">
+                                <p id="airport-conditions"></p>
+                            </td>
+                        <tr>
+                            <td>Distance to next destination:</td>
+                            <td><span id="next-destination-distance"></span>km</td>
+                        </tr>
+                    </table>
+                </section>
+                <section>
+
+                    <button id="" class="confirm-button button button-white" type="button">
+                        Confirm flight
+                    </button>
+
+
+                    <!--<button class="confirm-button button button-white" onclick="confirmFlight()">Confirm flight</button>-->
+                </section>
+            </div>
+        </main>
+        <footer class="page-footer">
+            <p>@G6 copyright</p>
+        </footer>
 </div>
 
-<!--<div id="player-modal">-->
-<!--    <form id="player-form">-->
-<!--        <input id="player-input" type="text" placeholder="Player Name" required>-->
-<!--        <input type="submit" value="Start voting tour">-->
-<!--    </form>-->
-<!--</div>-->
+<!--
+<div id="player-modal">
+<form id="player-form">
+<input id="player-input" type="text" placeholder="Player Name" required>
+<input type="submit" value="Start voting tour">
+</form>
+</div>-->
 
 </body>
 </html>

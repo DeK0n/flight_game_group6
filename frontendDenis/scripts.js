@@ -3,7 +3,7 @@ const playerName = prompt("Enter your name:");
 let airportsList;
 let playerInfo;
 let opponentInfo;
-let destinationIcao = "ESSA"; // change to chosen by player
+let destinationIcao = "EBBR"; // change to be chosen by player
 let jsonData;
 async function changeName() {
   try {
@@ -67,28 +67,48 @@ async function gameStart() {
     document.querySelector("#player-name").innerHTML = playerInfo.name;
     document.querySelector("#player-votes").innerHTML = playerInfo.votes;
     document.querySelector("#player-co2").innerHTML = playerInfo.co2;
-
+    document.getElementById("player-position").innerHTML=playerInfo.position
   }
   opponentInfo = await getOpponent();
-  if (playerInfo) {
+  if (opponentInfo) {
     document.querySelector("#opponent-name").innerHTML = opponentInfo.name;
     document.querySelector("#opponent-votes").innerHTML = opponentInfo.votes;
     document.querySelector("#opponent-co2").innerHTML = opponentInfo.co2;
-
   }
   airportsList = await getAirports();
 }
-function gameTurn() {
+async function gameTurn() {
   //modifications on each press of main button
-  modifyOneTurn(destinationIcao);
-  playerInfo = getPlayer();
-  opponentInfo = getOpponent();
-  airportsList = getAirports();
+  await modifyOneTurn(destinationIcao);
+  if (modifyOneTurn) {
+    playerInfo = await getPlayer();
+    if (playerInfo) {
+      document.querySelector("#player-name").innerHTML = playerInfo.name;
+      document.querySelector("#player-votes").innerHTML = playerInfo.votes;
+      document.querySelector("#player-co2").innerHTML = playerInfo.co2;
+      document.getElementById("player-position").innerHTML=playerInfo.position
+    }
+    opponentInfo = await getOpponent();
+    if (opponentInfo) {
+      document.querySelector("#opponent-name").innerHTML = opponentInfo.name;
+      document.querySelector("#opponent-votes").innerHTML = opponentInfo.votes;
+      document.querySelector("#opponent-co2").innerHTML = opponentInfo.co2;
+    }
+    airportsList = await getAirports();
+  }
 }
-
+function changetoESSA(){
+  destinationIcao = "ESSA"
+  destinationText.innerText =destinationIcao
+}
+function changetoEBBR(){
+  destinationIcao = "EBBR"
+  destinationText.innerText =destinationIcao
+}
 // game
 gameStart();
-// gameTurn();
+const destinationText = document.getElementById("player-destination");
+destinationText.innerText =destinationIcao
 
 // async function changeName() {
 //   console.log("asynchronous download begins");

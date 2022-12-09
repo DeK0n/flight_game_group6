@@ -19,9 +19,7 @@ async function changeName() {
 }
 async function getOpponent() {
   try {
-    const response = await fetch(
-      'http://127.0.0.1:5000/opponent-update'
-    );
+    const response = await fetch("http://127.0.0.1:5000/opponent-update");
     jsonData = await response.json();
     console.log("data", jsonData);
   } catch (error) {
@@ -31,9 +29,7 @@ async function getOpponent() {
 }
 async function getAirports() {
   try {
-    const response = await fetch(
-      'http://127.0.0.1:5000/airports-update'
-    );
+    const response = await fetch("http://127.0.0.1:5000/airports-update");
     jsonData = await response.json();
     console.log("data", jsonData);
   } catch (error) {
@@ -43,9 +39,7 @@ async function getAirports() {
 }
 async function getPlayer() {
   try {
-    const response = await fetch(
-      'http://127.0.0.1:5000/player-update'
-    );
+    const response = await fetch("http://127.0.0.1:5000/player-update");
     jsonData = await response.json();
     console.log("data", jsonData);
   } catch (error) {
@@ -66,18 +60,21 @@ async function modifyOneTurn(destinationIcao) {
   return jsonData;
 }
 
-
-
-
-function gameStart() {
+async function gameStart() {
   //first request to change name and get starting info
-  playerInfo = changeName();
-  opponentInfo = getOpponent();
-  airportsList = getAirports();
+  playerInfo = await changeName();
+  if (playerInfo) {
+    document.querySelector("#player-name").innerHTML = playerInfo.name;
+    document.querySelector("#player-votes").innerHTML = playerInfo.votes;
+    document.querySelector("#player-co2").innerHTML = playerInfo.co2;
+
+  }
+  opponentInfo = await getOpponent();
+  airportsList = await getAirports();
 }
-function gameTurn(){
+function gameTurn() {
   //modifications on each press of main button
-  modifyOneTurn(destinationIcao)
+  modifyOneTurn(destinationIcao);
   playerInfo = getPlayer();
   opponentInfo = getOpponent();
   airportsList = getAirports();
@@ -85,9 +82,7 @@ function gameTurn(){
 
 // game
 gameStart();
-console.log(playerInfo)
-gameTurn();
-console.log(playerInfo)
+// gameTurn();
 
 // async function changeName() {
 //   console.log("asynchronous download begins");

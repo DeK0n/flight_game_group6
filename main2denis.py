@@ -169,29 +169,29 @@ def nameUpdate(name):
 
 
 @ app.route('/player-update')
-def infoUpdate():
+def playerUpdate():
     response = getPlayer()
     return response
 
 @ app.route('/modify-players/<icao>')
-def infoUpdate(icao):
+def modifyUpdate(icao):
     modifyPlayer(icao)
     modifyOpponent()
     
 @ app.route('/opponent-update')
-def infoUpdate():
+def opponentUpdate():
     response = getOpponent()
     return response
 
 
 @ app.route('/airports-update')
-def infoUpdate():
+def airportsUpdate():
     response = airportList()
     return response
 
 
 @ app.route('/test')
-def itesting():
+def testing():
     response = '{"teststr":"OK", "testint":999, "testbool":true}'
     print(response)
     return response

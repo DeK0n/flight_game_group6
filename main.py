@@ -157,6 +157,7 @@ airportList = getAirports()
 # FLASK -------------------------------------->
 
 app = Flask(__name__)
+CORS(app) 
 
 
 @ app.route('/name-update/<name>')  # for changing name
@@ -180,6 +181,11 @@ def infoUpdate(player1Destination):
     c = airportList  # airports data
     response = "'"+str(a)+", " + str(b)+", " + str(c)+"'"
     return response
+
+@ app.route('/test')
+def itesting():
+    response = '{"name":"John", "age":30, "car":null}'
+    return response    
 
 
 if __name__ == '__main__':

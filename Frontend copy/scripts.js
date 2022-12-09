@@ -5,10 +5,7 @@ async function asynchronousFunction() {
   console.log("asynchronous download begins");
   try {
     const response = await fetch(
-      "http://127.0.0.1:5000/name-update/PlayerName",
-      {
-        mode: "no-cors",
-      }
+      "http://127.0.0.1:5000/test"
     );
     const jsonData = await response.json();
     console.log("data",jsonData);
@@ -20,3 +17,5 @@ async function asynchronousFunction() {
   }
 }
 asynchronousFunction();
+
+// ,{mode: "no-cors",}

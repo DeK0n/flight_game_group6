@@ -20,7 +20,7 @@ connection = mysql.connector.connect(
 )
 app = Flask(__name__)
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
-# FUNCTIONS
+# FUNCTION
 
 # real weather fetcher !!!!!!!!!!!!!!!!!! add somehow to the game!!!!!!!!!!!!!!!!!!!
 # def getTemperature(municipality):

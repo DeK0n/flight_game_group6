@@ -71,7 +71,7 @@
                         </tr>
                         <tr>
                             <td>CO2 status:</td>
-                            <td><span id="player-co2">10 000</span>kg</td>
+                            <td><span id="player-co2">100 000</span>kg</td>
                         </tr>
                     </table>
                 </section>
@@ -89,11 +89,11 @@
                         </tr>
                         <tr>
                             <td>Opponent's election status:</td>
-                            <td id=opponent-votes">votes</td>
+                            <td id="opponent-votes">votes</td>
                         </tr>
                         <tr>
                             <td>Opponent's c02 status:</td>
-                            <td><span id="opponent-co2">10 000</span>kg</td>
+                            <td><span id="opponent-co2">100 000</span>kg</td>
                         </tr>
                     </table>
                 </section>
@@ -122,7 +122,7 @@
                 </section>
                 <section>
 
-                    <button id="out" class="confirm-button button button-white" onclick="confirmFlight()">
+                    <button id="confirm-flight" class="confirm-button button button-white">
                         Confirm flight
                     </button>
 
@@ -133,14 +133,15 @@
         <footer class="page-footer">
             <p>@G6 copyright</p>
         </footer>
+    </section>
 </div>
 
 
 <div id="player-modal">
-<form id="player-form">
-<input id="player-input" type="text" placeholder="Player Name" required>
-<input type="submit" value="Start voting tour">
-</form>
+    <form id="player-form">
+        <input id="player-input" type="text" placeholder="Player Name" required>
+        <input type="submit" value="Start voting tour">
+    </form>
 </div>
 
 </body>

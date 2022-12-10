@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css">
+    <title>G6 FLIGHT SIMULATOR</title>
+  </head>
+  <body>
+    <div class="pageWrapper">
+      <!-- header -->
+      <div class="header">
+        <div class="logo"><img src="images/testlogo.jpg" alt="logo" height="80px"></div>
+        <nav class="navigation">
+          <a href="game.html" class="link, activeLink">New game</a>
+          <a href="about.html" class="link">About</a>
+          </nav>
+      </div>
+      <!-- main -->
+      <div class="productsContent">
+        <div class="productsList">
+          <div class="productWrapper">
+            <h2 class="productTitle">Place for map</h2>
+          </div>
+          <div class="productWrapper">
+            <h2 class="productTitle">Player</h2>
+            <h3>Name:</h3>
+            <p id="player-name"></p>
+            <h3>Votes:</h3>
+            <p id="player-votes"></p>
+            <h3>CO2 budget:</h3>
+            <p id="player-co2"></p>
+          </div>
+          <div class="productWrapper">
+            <h2 class="productTitle">Opponent</h2>
+            <h3>Name:</h3>
+            <p id="opponent-name"></p>
+            <h3>Votes:</h3>
+            <p id="opponent-votes"></p>
+            <h3>CO2 budget:</h3>
+            <p id="opponent-co2"></p>
+          </div>
+        </div>
+        <h3>Current position:</h3>
+        <p id="player-position"></p>
+        <h3>Selected destination:</h3>
+        <p id="player-destination"></p>
+        <button id="EBBR-button" onclick="changetoEBBR()">Choose Brusseles EBBR</button>
+        <button id="ESSA-button" onclick="changetoESSA()">Choose Stockholm ESSA</button>
+        <button id="game-button" onclick="gameTurn()">Press to fly</button>
+      </div>
+    <script src="scripts.js" defer></script>
+  </body>
+</html>

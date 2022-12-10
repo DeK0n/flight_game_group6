@@ -33,17 +33,6 @@ document.querySelector('#player-form').addEventListener('submit', function (evt)
    gameSetup(`${apiUrl}newgame?player=${playerName}&loc=${startLoc}`);
 });
 
-// function to update game status
-
-function updateStatus(status) {
-    document.getElementById('player-co2').innerHTML = player.co2;
-    document.getElementById('player-votes').innerHTML = player.votes;
-    document.getElementById('opponent-co2').innerHTML = opponent_co2;
-    document.getElementById('opponent-votes').innerHTML = opponent.votes
-    document.querySelector('#consumed').innerHTML = status.co2.consumed;
-    document.querySelector('#number_of_place_visited').innerHTML = status.countries_visited;
-    document.querySelector('#number-votes').innerHTML = status.votes
-}
 
 // function to show weather at selected airport
 function showWeather() {
@@ -73,6 +62,8 @@ async function gameSetUp() {
         const data = await response.json();
         let airports = data.airport;
         opponent = data.opponent;
+        let votes = data.opponent.votes;
+        console.log(votes)
         map = new Map(airports, brusselCoord);
 
     } catch (error){
@@ -82,9 +73,12 @@ async function gameSetUp() {
     }
 }
 
+
+
 async function confirmFlight (destination) {
     try {
         let url = 'http://127.0.0.1:5000/info-update/' + destination;
+;
         const response = await fetch(url);
         const data = await response.json();
         let airports = data.airport;
@@ -95,6 +89,10 @@ async function confirmFlight (destination) {
         let player_co2 = player.co2;
         let player_votes = player.votes;
         map.refreshAirportList(airports);
+        document.getElementById('player-co2').innerHTML = player_co2;
+        document.getElementById('player-votes').innerHTML = player_votes;
+        document.getElementById('opponent-co2').innerHTML = opponent_co2;
+        document.getElementById('opponent-votes').innerHTML = opponent_votes
         checkGameOver()
     } catch (e) {
 

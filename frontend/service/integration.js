@@ -6,6 +6,7 @@ class Map {
         this.currentLocationCoord = this.originalCoord;
         this.airports = airports;
         this.selectAirportLine = null;
+        this.linePath = null;
         // Initiate map
         this.map = L.map('map', {tap: false, zoomControl: false});
         L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
@@ -13,33 +14,23 @@ class Map {
             minZoom: 4,
             subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
         }).addTo(this.map);
-        this.map.setView(this.originalCoord, 4);
-
-
-        //Adding markers for cities
+        this.refreshMap(this.originalCoord, this.airports);
         L.marker(this.originalCoord).addTo(this.map).bindPopup('Your staring city').openPopup();
-        for (let i = 0; i < this.airports.length; i++) {
-            let coord = [this.airports[i].latitude, this.airports[i].longitude];
-            let title = `${this.airports[i].city} - ${this.airports[i].distance}km`;
-            let marker = L.marker(coord, {title: title, airport: this.airports[i]}).addTo(this.map)
+
+    }
+    refreshMap(nextDestinationCoord, airports) {
+        this.map.setView(nextDestinationCoord, 4);
+        for (let i = 0; i < airports.length; i++) {
+            let coord = [airports[i].latitude, airports[i].longitude];
+            let title = `${airports[i].city} - ${airports[i].distance}km`;
+            let marker = L.marker(coord, {title: title, airport: airports[i]}).addTo(this.map)
             marker.on('click', (e) => {
                 let selectedAirport = e.target.options.airport
                 this.selectAirport(selectedAirport)
                 let message = `${e.target.options.airport.city} is ${e.target.options.airport.distance}km away.`
                 marker.bindPopup(message).openPopup();
             });
-            marker.on('mouseover', (e) => {
-
-            })
         }
-    }
-
-    refreshAirportList(airports) {
-        this.airports = airports;
-    }
-
-    getDistance(airport) {
-        return this.airports[this.airports.indexOf(airport)].distance;
     }
 
     selectAirport(airport) {
@@ -49,6 +40,14 @@ class Map {
 
         let event = new CustomEvent("selectCity", {detail: airport});
         document.dispatchEvent(event);
+    }
+
+    flyTo (nextDestination, airports) {
+        let nextDestinationCoord = [nextDestination.latitude, nextDestination.longitude];
+        this.selectAirportLine = null;
+        let linePath = L.polyline([this.currentLocationCoord, nextDestinationCoord]);
+        this.currentLocationCoord = nextDestinationCoord;
+        this.refreshMap(nextDestinationCoord, airports);
     }
 }
 

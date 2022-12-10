@@ -5,45 +5,31 @@ const brusselCoord = [50.901401519800004,
                       4.48443984985]
 let map = null;
 let opponent = null;
+let selectedNextDestination = null;
+let playerCO2Budget = 1000000;
+let opponentCO2Budget = 1000000;
+let playerVotes = 0;
+let opponentVotes = 0;
+let playerName = ''
 
 document.addEventListener("selectCity", function(e) {
-    let airport = e.detail;
-    document.getElementById('airport-name').innerHTML = airport.city;
-    document.getElementById('airport-conditions').innerHTML = airport.weather;
-    document.getElementById('next-destination-distance').innerHTML = airport.distance;
+    selectedNextDestination = e.detail;
+    document.getElementById('airport-name').innerHTML = selectedNextDestination.city;
+    document.getElementById('airport-conditions').innerHTML = selectedNextDestination.weather;
+    document.getElementById('next-destination-distance').innerHTML = selectedNextDestination.distance;
 });
 
-
-const apiUrl ='http://127.0.0.1:5000/';
-const startLoc = 'EBBR';
-const countries_visited = [];
 let days_until_election = 7;
 
-// icons
-
-const blueIcon = L.divIcon({className: 'blue-icon'});
-const greenIcon = L.divIcon({className: 'green-icon'});
 
 // form for player name
 document.querySelector('#player-form').addEventListener('submit', function (evt){
    evt.preventDefault();
-   const playerName = document.querySelector('#player-input').value;
+   playerName = document.querySelector('#player-input').value;
    document.getElementById("player-name").innerHTML=playerName;
    document.querySelector('#player-modal').classList.add('hide');
-   gameSetup(`${apiUrl}newgame?player=${playerName}&loc=${startLoc}`);
 });
 
-// function to update game status
-
-function updateStatus(status) {
-    document.getElementById('player-co2').innerHTML = player.co2;
-    document.getElementById('player-votes').innerHTML = player.votes;
-    document.getElementById('opponent-co2').innerHTML = opponent_co2;
-    document.getElementById('opponent-votes').innerHTML = opponent.votes
-    document.querySelector('#consumed').innerHTML = status.co2.consumed;
-    document.querySelector('#number_of_place_visited').innerHTML = status.countries_visited;
-    document.querySelector('#number-votes').innerHTML = status.votes
-}
 
 // function to show weather at selected airport
 function showWeather() {
@@ -55,24 +41,29 @@ function showWeather() {
 // function to check if game is over
 
 function checkGameOver () {
-    for (let i=7; 0<i<7; i--) {
-        if (days_until_election = 0) {
-        alert(`Game Over.${countries_visited.length} goals reached.`);
-        return false;
-    }}
-
-    return true;
+    let daysLeft = document.getElementById('days-left');
+    daysLeft.innerHTML = days_until_election.toString() + ' days';
+    if(days_until_election === 0) {
+        confirmButton = document.getElementById('confirm-flight');
+        confirmButton.innerHTML = 'Play again';
+        alert(`Game ended. The winner is ${playerVotes > opponentVotes ? 'the player ' + playerName : 'the AI.'}` )
+    }
 }
 
 // function to set up game
 // this is the main function that creates the game and calls the other functions
 
+async function resetGame() {
+    location.reload();
+}
 async function gameSetUp() {
     try {
-        const response = await fetch('http://127.0.0.1:5000/info-update/EHAM');
+        const response = await fetch('http://127.0.0.1:5000/info-update/EBBR');
         const data = await response.json();
         let airports = data.airport;
         opponent = data.opponent;
+        let votes = data.opponent.votes;
+        console.log(votes)
         map = new Map(airports, brusselCoord);
 
     } catch (error){
@@ -82,77 +73,40 @@ async function gameSetUp() {
     }
 }
 
-async function confirmFlight (destination) {
-    try {
-        let url = 'http://127.0.0.1:5000/info-update/' + destination;
-        const response = await fetch(url);
-        const data = await response.json();
-        let airports = data.airport;
-        let opponent = data.opponent;
-        let opponent_co2 = opponent.co2;
-        let opponent_votes = opponent.votes;
-        let player = data.player;
-        let player_co2 = player.co2;
-        let player_votes = player.votes;
-        map.refreshAirportList(airports);
-        checkGameOver()
-    } catch (e) {
+let confirmButton = document.getElementById('confirm-flight')
+confirmButton.addEventListener('click', await confirmFlight, false)
 
+
+async function confirmFlight (e) {
+    e.preventDefault();
+    if(days_until_election > 0) {
+        days_until_election = days_until_election - 1;
+        try {
+            let url = 'http://127.0.0.1:5000/info-update/' + selectedNextDestination.icao;
+            const response = await fetch(url);
+            const data = await response.json();
+            console.log(data)
+            let airports = data.airport;
+            map.flyTo(selectedNextDestination, airports);
+            let opponent = data.opponent;
+            let opponent_co2 = opponent.co2;
+            opponentVotes += opponent.votes;
+            let player = data.player;
+            let player_co2 = player.co2;
+            playerVotes += player.votes;
+            playerCO2Budget += player_co2
+            opponentCO2Budget += opponent_co2
+            document.getElementById('player-co2').innerHTML = playerCO2Budget;
+            document.getElementById('player-votes').innerHTML = playerVotes + ' votes';
+            document.getElementById('opponent-co2').innerHTML = opponentCO2Budget;
+            document.getElementById('opponent-votes').innerHTML = opponentVotes + ' votes'
+            checkGameOver()
+        } catch (e) {
+
+        }
+    } else {
+        resetGame()
     }
 }
 
 gameSetUp()
-
-
-/*
-async function gameSetup(url) {
-    try {
-        document.querySelector('.days-left').classList.add('hide');
-        airportMarkers.clearLayers();
-        const nameUpdate = await nameUpdate(url);
-        updateStatus(nameUpdate.player1.name);
-        if(!checkGameOver(nameUpdate.status.days_until_election)) return;
-
-        for (let airport of infoUpdate.airports) {
-            const marker = L.marker([airport.latitude, airport.longitude]).addTo(map);
-            airportMarkers.addLayer(marker);
-            if (airport in airports) {
-                map.flyTo([airport.latitude, airport.longitude], 10);
-                showWeather(airport);
-                marker.bindPopup(`You are here:<b>${airport.name}</b>`);
-                marker.openPopup();
-                marker.setIcon(greenIcon);
-            } else {
-                marker.setIcon(blueIcon);
-                const popupContent = document.createElement('div');
-                const goButton = document.createElement('button');
-                goButton.classList.add('button');
-                goButton.innerHTML = 'Fly here';
-                popupContent.append(goButton);
-                const p = document.createElement('P');
-                p.innerHTML = `Distance ${airport.distance} km`;
-                popupContent.append(p);
-                marker.bindPopup(popupContent);
-                goButton.addEventListener('click', function () {
-//                    gameSetup(`${apiUrl}?game=`);
-                })
-            }
-        }
-
-    } catch (error) {
-        console.log(error);
-    }
-
-
- */
-
-
-
-
-/*
-// event listener to hide goal splash
-document.querySelector('.goal').addEventListener('click', function (evt){
-    evt.currentTarget.classList.add('hide');
-})
-
- */

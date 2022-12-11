@@ -37,6 +37,9 @@ function initializeMarks() {
       destinationText.innerText = airportsList[i].city;
       document.getElementById("weather-destination").innerText =
         airportsList[i].weather;
+      document.getElementById("distance-destination").innerText =
+        `${airportsList[i].distance} km`;
+        
     });
     markerList.push(marker);
   }
@@ -149,7 +152,9 @@ async function gameTurn() {
     airportsList = await getAirports();
   }
   destinationText.innerText = "- - -";
+  
   document.getElementById("weather-destination").innerText = "- - -";
+  document.getElementById("distance-destination").innerText = "- - -";
   daysCounter = daysCounter - 1;
   document.getElementById("days-counter").innerHTML = `${daysCounter} days`;
 

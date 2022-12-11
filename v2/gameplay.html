@@ -27,7 +27,7 @@
     />
   </head>
   <body>
-    <div class="container">
+    <div class="container opacity-zero"id="main-container">
       <div class="mapArea"><div id="map" style="height: 100vh"></div></div>
       <div class="positionArea twoColumn">
         <p class="infoTitle titleText">Current position</p>
@@ -56,6 +56,10 @@
         <p id="weather-destination">- - -</p>
         <button id="game-button" onclick="gameTurn()">Confirm flight</button>
       </div>
+    </div>
+    <div class="finalBoard hidden" id="final-board">
+      <div class="popupBackground"></div>
+      <div class="popupContainer"></div>
     </div>
   </body>
 </html>

@@ -38,6 +38,9 @@ body {
     "mapArea destinationArea";
   overflow: hidden;
 }
+.opacity-zero {
+  opacity: 0;
+}
 .twoColumn {
   display: grid;
   grid-template-columns: repeat(2, 50%);
@@ -45,7 +48,6 @@ body {
 }
 .titleText {
   color: rgb(224, 217, 14);
-  
 }
 
 .infoTitle {
@@ -92,10 +94,35 @@ body {
   background-color: #111111;
   padding-left: 20px;
 }
-.finalBoard{
-  display: hidden;
+/* for final scores---->*/
+.finalBoard {
+  position: fixed;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  top: 0;
+  left: 0;
 }
-
+.hidden {
+  display: none;
+}
+.popupBackground {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.85);
+  z-index: 0;
+}
+.popupContainer {
+  width: 600px;
+  height: 360px;
+  background-color: white;
+  z-index: 1;
+}
+/* <------for final scores */
 button {
   background-color: #111111;
   border: none;

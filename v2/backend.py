@@ -111,7 +111,7 @@ def modifyPlayer(player1Destination):  # modifing player data on each game loop
         player1.co2Coefficient = 0.9
 
     player1.votes = player1.votes + \
-        round((random.randint(350, 500)*votingCoefficient*player1.co2Coefficient)
+        round((random.randint(350, 500)*votingCoefficient)
               )
 
     player1.position = player1Destination  # changing destination to current

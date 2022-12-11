@@ -3,8 +3,6 @@ from geopy import distance
 import mysql.connector
 from flask import Flask, request
 from flask_cors import CORS
-import math
-import json
 import random
 import requests
 
@@ -21,14 +19,14 @@ connection = mysql.connector.connect(
 
 # FUNCTIONS
 
-# real weather fetcher !!!!!!!!!!!!!!!!!! add somehow to the game!!!!!!!!!!!!!!!!!!!
-# def getTemperature(municipality):
-#     cityName = municipality
-#     request = "https://api.openweathermap.org/data/2.5/weather?q=" + \
-#         cityName + \
-#         "&appid={APIkey}&units=metric"  # paste your openweathermap api key where {APIkey} without brackets
-#     response = requests.get(request).json()
-#     return response["main"]["temp"]
+#real weather
+def getTemperature(municipality):
+    cityName = municipality
+    request = "https://api.openweathermap.org/data/2.5/weather?q=" + \
+        cityName + \
+        "&appid={APIkey}&units=metric"  # paste your openweathermap api key where {APIkey} without brackets
+    response = requests.get(request).json()
+    return response["main"]["temp"]
 
 
 def playerIdGen():  # random id generator

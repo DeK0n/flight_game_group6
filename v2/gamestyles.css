@@ -19,6 +19,8 @@ body {
 
   min-height: 100vh;
   background-color: grey;
+  /* background-image: url('images/background.svg');
+  background-repeat: no-repeat; */
 }
 .container {
   height: 100%;
@@ -37,6 +39,9 @@ body {
     "mapArea opponentVotesArea"
     "mapArea destinationArea";
   overflow: hidden;
+  position:relative;
+  z-index: 1;
+  background-color: grey;
 }
 .opacity-zero {
   opacity: 0;

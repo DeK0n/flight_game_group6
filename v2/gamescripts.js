@@ -163,6 +163,8 @@ async function gameTurn() {
     document.getElementById("game-button").innerHTML =
       "Confirm last flight and go to elections";
     document.getElementById("days-counter").innerHTML = `${daysCounter} day`;
+    document.getElementById("real-weather").innerHTML = playerInfo.apiInfo;
+   
   }
   if (daysCounter == 0) {
     document.getElementById("final-board").classList.remove("hidden");

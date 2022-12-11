@@ -162,7 +162,7 @@ player2 = Player("Opponent", 10000, "EBBR", "Brussels")
 airportList = getAirports()
 realWeather = getTemperature()
 realCurrency = getCurrencyRate()
-player1.apiInfo = "Real weather Brusseles: "+str(realWeather)
+player1.apiInfo = "Real weather in Brusseles: "+str(realWeather)
 player2.apiInfo = "EUR to USD rate:"+ str(realCurrency)
 
 

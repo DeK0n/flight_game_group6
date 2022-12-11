@@ -119,8 +119,9 @@ body {
 .popupContainer {
   width: 600px;
   height: 360px;
-  background-color: white;
+  background-color: #111111;
   z-index: 1;
+  border: 2px solid rgb(224, 217, 14);
 }
 /* <------for final scores */
 button {

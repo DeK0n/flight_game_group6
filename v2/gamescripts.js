@@ -8,6 +8,7 @@ let jsonData;
 const markerList = [];
 let marker;
 let daysCounter = 7;
+let winStatus = "";
 // map---->
 var map = L.map("map", {
   center: [52, 12],
@@ -165,9 +166,21 @@ async function gameTurn() {
   }
   if (daysCounter == 0) {
     document.getElementById("final-board").classList.remove("hidden");
+    compareVotes()
+    document.getElementById("final-player-votes").innerHTML = `${playerInfo.name}: ${playerInfo.votes} votes`;
+    document.getElementById("final-opponent-votes").innerHTML = `${opponentInfo.name}: ${opponentInfo.votes} votes`;
+    document.getElementById("win-status").innerHTML = `${winStatus}`;
   }
 }
 
+function compareVotes(){
+  if(playerInfo.votes>opponentInfo.votes){
+    winStatus = "YOU WIN THE ELECTIONS"
+  }
+  else{
+    winStatus = "YOUR OPPONENT WINS THE ELECTIONS"
+  }
+}
 // game
 gameStart();
 const destinationText = document.getElementById("player-destination");

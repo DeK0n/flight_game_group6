@@ -27,7 +27,7 @@
     />
   </head>
   <body>
-    <div class="container opacity-zero"id="main-container">
+    <div class="container opacity-zero" id="main-container">
       <div class="mapArea"><div id="map" style="height: 100vh"></div></div>
       <div class="positionArea twoColumn">
         <p class="infoTitle titleText">Current position</p>
@@ -61,7 +61,11 @@
     </div>
     <div class="finalBoard hidden" id="final-board">
       <div class="popupBackground"></div>
-      <div class="popupContainer"></div>
+      <div class="popupContainer">
+        <h3 id="win-status">-</h3>
+        <p id="final-player-votes">- - -</p>
+        <p id="final-opponent-votes">- - -</p>
+      </div>
     </div>
   </body>
 </html>

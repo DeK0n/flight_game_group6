@@ -31,7 +31,7 @@ function initializeMarks() {
     marker = L.marker([
       +airportsList[i].latitude, +airportsList[i].longitude,
     ]).addTo(map);
-    marker.bindPopup(`${airportsList[i].city}`); //.openOn(map)
+    // marker.bindPopup(`${airportsList[i].city}`); //.openOn(map)
     marker.on('click', (e) => {
       destinationIcao = airportsList[i].icao
       destinationText.innerText = airportsList[i].city
@@ -137,6 +137,7 @@ async function gameTurn() {
     airportsList = await getAirports();
   }
   destinationText.innerText = '- - -';
+  document.getElementById("weather-destination").innerText='- - -';
   daysCounter=daysCounter-1
   document.getElementById("days-counter").innerHTML = `${daysCounter} days`;
 

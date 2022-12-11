@@ -88,4 +88,5 @@ body {
 .destinationArea {
   grid-area: destinationArea;
   background-color: grey;
+  padding-left: 20px;
 }

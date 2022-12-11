@@ -39,7 +39,7 @@ body {
     "mapArea opponentVotesArea"
     "mapArea destinationArea";
   overflow: hidden;
-  position:relative;
+  position: relative;
   z-index: 1;
   background-color: grey;
 }

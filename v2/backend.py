@@ -202,7 +202,7 @@ def opponentUpdate():
 
 @ app.route('/airports-update')
 def airportsUpdate():
-    response = airportList
+    response = getAirports()
     return response
 
 

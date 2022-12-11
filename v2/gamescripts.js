@@ -101,14 +101,14 @@ async function gameStart() {
   //first request to change name and get starting info
   playerInfo = await changeName();
   if (playerInfo) {
-    document.querySelector("#player-name").innerHTML = playerInfo.name;
+    document.querySelector("#player-name").innerHTML = `${playerInfo.name}'s votes`;
     document.querySelector("#player-votes").innerHTML = playerInfo.votes;
     document.querySelector("#player-co2").innerHTML = playerInfo.co2;
     document.getElementById("player-position").innerHTML = playerInfo.positionCity;
   }
   opponentInfo = await getOpponent();
   if (opponentInfo) {
-    document.querySelector("#opponent-name").innerHTML = opponentInfo.name;
+    document.querySelector("#opponent-name").innerHTML =`${opponentInfo.name}'s votes`;
     document.querySelector("#opponent-votes").innerHTML = opponentInfo.votes;
   }
   airportsList = await getAirports();
@@ -124,14 +124,14 @@ async function gameTurn() {
   if (modifyOneTurn) {
     playerInfo = await getPlayer();
     if (playerInfo) {
-      document.querySelector("#player-name").innerHTML = playerInfo.name;
+      document.querySelector("#player-name").innerHTML = `${playerInfo.name}'s votes`;
       document.querySelector("#player-votes").innerHTML = playerInfo.votes;
       document.querySelector("#player-co2").innerHTML = playerInfo.co2;
       document.getElementById("player-position").innerHTML = playerInfo.positionCity;
     }
     opponentInfo = await getOpponent();
     if (opponentInfo) {
-      document.querySelector("#opponent-name").innerHTML = opponentInfo.name;
+      document.querySelector("#opponent-name").innerHTML =`${opponentInfo.name}'s votes`;
       document.querySelector("#opponent-votes").innerHTML = opponentInfo.votes;
     }
     airportsList = await getAirports();

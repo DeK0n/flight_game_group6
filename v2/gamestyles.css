@@ -12,13 +12,13 @@ body {
   font-family: "Bebas Neue", sans-serif;
   font-weight: 400;
   line-height: 1.6;
-  color: #111111;
+  color: whitesmoke;
 
   background-size: cover;
   background-repeat: no-repeat;
 
   min-height: 100vh;
-  background-color: #111111;
+  background-color: grey;
 }
 .container {
   height: 100%;
@@ -43,50 +43,69 @@ body {
   grid-template-columns: repeat(2, 50%);
   align-items: center;
 }
-/* .twoColumn > *:first-child {
-  margin-right: 4px;
-} */
-.infoTitle {
-    box-sizing: border-box;
-    padding-left: 20px;
-    text-align: left;
+.titleText {
+  color: rgb(224, 217, 14);
+  
 }
-.infoValue{
-    box-sizing: border-box;
-    padding: 4px;
-    text-align: center;
+
+.infoTitle {
+  box-sizing: border-box;
+  padding-left: 20px;
+  text-align: left;
+}
+.infoValue {
+  box-sizing: border-box;
+  padding: 4px;
+  text-align: center;
 }
 .mapArea {
   grid-area: mapArea;
-  }
+}
 
 .positionArea {
   grid-area: positionArea;
-  background-color: white;
+  background-color: #111111;
 }
 
 .daysArea {
   grid-area: daysArea;
-  background-color: grey;
+  background-color: #111111;
 }
 
 .co2Area {
   grid-area: co2Area;
-  background-color: white;
+  background-color: #111111;
 }
 
 .playerVotesArea {
   grid-area: playerVotesArea;
-  background-color: grey;
+  background-color: #111111;
 }
 
 .opponentVotesArea {
   grid-area: opponentVotesArea;
-  background-color: white;
+  background-color: #111111;
 }
 
 .destinationArea {
   grid-area: destinationArea;
-  background-color: grey;
+  background-color: #111111;
   padding-left: 20px;
+}
+.finalBoard{
+  display: hidden;
+}
+
+button {
+  background-color: #111111;
+  border: none;
+  color: whitesmoke;
+  padding: 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 24px;
+  border-radius: 2px;
+  border: 2px solid rgb(224, 217, 14);
 }

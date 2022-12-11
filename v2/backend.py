@@ -23,13 +23,18 @@ connection = mysql.connector.connect(
 
 
 def getTemperature():
-    request = "https://api.openweathermap.org/data/2.5/weather?q=Brussels&appid=a90e3aac59a9af0d4c05758d10e19343&units=metric" 
+    request = "https://api.openweathermap.org/data/2.5/weather?q=Brussels&appid=a90e3aac59a9af0d4c05758d10e19343&units=metric"
     response = requests.get(request).json()
-    x = str(response["weather"][0]["description"])+" and "+ str(response["main"]["temp"])+" C"
+    x = str(response["weather"][0]["description"]) + \
+        " and " + str(response["main"]["temp"])+" C"
     return x
-    
 
 
+def getCurrencyRate():
+    request = "https://www.freeforexapi.com/api/live?pairs=EURUSD"
+    response = requests.get(request).json()
+    x = response["rates"]["EURUSD"]["rate"]
+    return x
 
 
 def playerIdGen():  # random id generator
@@ -126,20 +131,20 @@ def modifyOpponent():  # modify opponent each game loop - make more complicated 
 
 def getPlayer():  # combine player info to send to fromtend
     response = {"name": player1.name, "id": player1.id, "co2": player1.co2,
-                "position": player1.position, "positionCity": player1.positionCity, "c02coefficient": player1.co2Coefficient, "votes": player1.votes,"apiInfo":player1.apiInfo}
+                "position": player1.position, "positionCity": player1.positionCity, "c02coefficient": player1.co2Coefficient, "votes": player1.votes, "apiInfo": player1.apiInfo}
     return response
 
 
 def getOpponent():  # compbine opponent info to send to forntend
     response = {"name": player2.name, "id": player2.id, "co2": player2.co2,
-                "position": player2.position, "positionCity": player2.positionCity, "c02coefficient": player2.co2Coefficient, "votes": player2.votes,"apiInfo":player2.apiInfo}
+                "position": player2.position, "positionCity": player2.positionCity, "c02coefficient": player2.co2Coefficient, "votes": player2.votes, "apiInfo": player2.apiInfo}
     return response
 
 
 # Game
 
 class Player:
-    def __init__(self, name, co2, position, positionCity, co2Coefficient=1, votes=0,apiInfo="") -> None:
+    def __init__(self, name, co2, position, positionCity, co2Coefficient=1, votes=0, apiInfo="") -> None:
         self.name = name
         self.id = id
         self.co2 = co2
@@ -155,9 +160,11 @@ getName = "Enter your name"
 player1 = Player(getName, 15000, "EBBR", "Brussels")
 player2 = Player("Opponent", 15000, "EBBR", "Brussels")
 airportList = getAirports()
-realWeather = getTemperature() 
+realWeather = getTemperature()
+realCurrency = getCurrencyRate()
 print(realWeather)
-player1.apiInfo="Real temperature in Brusseles is: "+str(realWeather)+" C"
+player1.apiInfo = "Real weather Brusseles: "+str(realWeather)
+player2.apiInfo = "EUR to USD rate:"+ str(realCurrency)
 
 
 # FLASK -------------------------------------->

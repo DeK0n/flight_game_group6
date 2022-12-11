@@ -164,6 +164,7 @@ async function gameTurn() {
       "Confirm last flight and go to elections";
     document.getElementById("days-counter").innerHTML = `${daysCounter} day`;
     document.getElementById("real-weather").innerHTML = playerInfo.apiInfo;
+    document.getElementById("real-currency").innerHTML = opponentInfo.apiInfo;
    
   }
   if (daysCounter == 0) {

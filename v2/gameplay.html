@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="gamestyles.css" />
+    <title>G6 FLIGHT SIMULATOR: Elections</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+      integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+      crossorigin=""
+    />
+    <script
+      src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+      integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+      crossorigin=""
+      defer
+    ></script>
+    <script src="gamescripts.js" defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div class="container">
+      <div class="mapArea"><div id="map" style="height: 100vh"></div></div>
+      <div class="positionArea twoColumn">
+        <p class="infoTitle">Current position</p>
+        <p class="infoValue" id="player-position">2</p>
+      </div>
+      <div class="daysArea twoColumn">
+        <p class="infoTitle">Days until elections</p>
+        <p class="infoValue"id="days-counter">14 days</p>
+      </div>
+      <div class="co2Area twoColumn">
+        <p class="infoTitle">CO2 budjet</p>
+        <p class="infoValue" id="player-co2">6</p>
+      </div>
+      <div class="playerVotesArea twoColumn">
+        <p class="infoTitle" id="player-name">7</p>
+        <p class="infoValue" id="player-votes">8</p>
+      </div>
+      <div class="opponentVotesArea twoColumn">
+        <p class="infoTitle" id="opponent-name">9</p>
+        <p class="infoValue" id="opponent-votes">10</p>
+      </div>
+      <div class="destinationArea twoColumn">
+        <h3>Selected destination:</h3>
+        <p id="player-destination"></p>
+        <h3>Weather on destination:</h3>
+        <p id="weather-destination">---</p>
+        <button id="game-button" onclick="gameTurn()">Confirm flight</button>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,91 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  box-sizing: border-box;
+  font-size: 24px;
+}
+
+body {
+  font-family: "Bebas Neue", sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+  color: #111111;
+
+  background-size: cover;
+  background-repeat: no-repeat;
+
+  min-height: 100vh;
+  background-color: #111111;
+}
+.container {
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-template-rows: 1fr 1fr 1fr 1fr 1fr 5fr;
+  gap: 4px 4px;
+  grid-auto-flow: row;
+  grid-template-areas:
+    "mapArea positionArea"
+    "mapArea daysArea"
+    "mapArea co2Area"
+    "mapArea playerVotesArea"
+    "mapArea opponentVotesArea"
+    "mapArea destinationArea";
+  overflow: hidden;
+}
+.twoColumn {
+  display: grid;
+  grid-template-columns: repeat(2, 50%);
+  align-items: center;
+}
+/* .twoColumn > *:first-child {
+  margin-right: 4px;
+} */
+.infoTitle {
+    box-sizing: border-box;
+    padding-left: 20px;
+    text-align: left;
+}
+.infoValue{
+    box-sizing: border-box;
+    padding: 4px;
+    text-align: center;
+}
+.mapArea {
+  grid-area: mapArea;
+  }
+
+.positionArea {
+  grid-area: positionArea;
+  background-color: white;
+}
+
+.daysArea {
+  grid-area: daysArea;
+  background-color: grey;
+}
+
+.co2Area {
+  grid-area: co2Area;
+  background-color: white;
+}
+
+.playerVotesArea {
+  grid-area: playerVotesArea;
+  background-color: grey;
+}
+
+.opponentVotesArea {
+  grid-area: opponentVotesArea;
+  background-color: white;
+}
+
+.destinationArea {
+  grid-area: destinationArea;
+  background-color: grey;
+}

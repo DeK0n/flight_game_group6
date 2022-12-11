@@ -6,6 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="styles.css">
     <title>G6 FLIGHT SIMULATOR</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+     integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+     crossorigin=""/>
+     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+     integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+     crossorigin=""></script>
   </head>
   <body>
     <div class="pageWrapper">
@@ -22,6 +28,7 @@
         <div class="productsList">
           <div class="productWrapper">
             <h2 class="productTitle">Place for map</h2>
+            <div id="map" style="height: 180px" ></div>
           </div>
           <div class="productWrapper">
             <h2 class="productTitle">Player</h2>

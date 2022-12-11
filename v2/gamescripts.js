@@ -5,17 +5,41 @@ let playerInfo;
 let opponentInfo;
 let destinationIcao = "EBBR"; // change to be chosen by player
 let jsonData;
-
+const markerList = [];
+let marker;
+let daysCounter = 7;
 // map---->
-var map = L.map('map').setView([50.901401519800004,
-  4.48443984985], 13);
-  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+var map = L.map('map', {
+  center: [52, 12],
+  zoom: 4,
+  zoomControl: false,
+  dragging: false,
+});
+
+L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  maxZoom: 4,
+  minZoom: 4,
+  
+
+  // attribution:
+  //   '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
 }).addTo(map);
-var marker = L.marker([50.901401519800004,
-  4.48443984985]).addTo(map);
-marker.bindPopup("I am a popup.");//.openOn(map)
+
+function initializeMarks() {
+  console.log(airportsList);
+  for (let i = 0; i < airportsList.length; i++) {
+    marker = L.marker([
+      +airportsList[i].latitude, +airportsList[i].longitude,
+    ]).addTo(map);
+    marker.bindPopup(`${airportsList[i].city}`); //.openOn(map)
+    marker.on('click', (e) => {
+      destinationIcao = airportsList[i].icao
+      destinationText.innerText = airportsList[i].city
+      document.getElementById("weather-destination").innerText=airportsList[i].weather;
+    });
+    markerList.push(marker);
+  }
+}
 // <----map
 
 async function changeName() {
@@ -80,18 +104,22 @@ async function gameStart() {
     document.querySelector("#player-name").innerHTML = playerInfo.name;
     document.querySelector("#player-votes").innerHTML = playerInfo.votes;
     document.querySelector("#player-co2").innerHTML = playerInfo.co2;
-    document.getElementById("player-position").innerHTML=playerInfo.position
+    document.getElementById("player-position").innerHTML = playerInfo.positionCity;
   }
   opponentInfo = await getOpponent();
   if (opponentInfo) {
     document.querySelector("#opponent-name").innerHTML = opponentInfo.name;
     document.querySelector("#opponent-votes").innerHTML = opponentInfo.votes;
-    document.querySelector("#opponent-co2").innerHTML = opponentInfo.co2;
   }
   airportsList = await getAirports();
+  if (airportsList) {
+    initializeMarks();
+    console.log(marker);
+  }
 }
 async function gameTurn() {
   //modifications on each press of main button
+  
   await modifyOneTurn(destinationIcao);
   if (modifyOneTurn) {
     playerInfo = await getPlayer();
@@ -99,26 +127,27 @@ async function gameTurn() {
       document.querySelector("#player-name").innerHTML = playerInfo.name;
       document.querySelector("#player-votes").innerHTML = playerInfo.votes;
       document.querySelector("#player-co2").innerHTML = playerInfo.co2;
-      document.getElementById("player-position").innerHTML=playerInfo.position
+      document.getElementById("player-position").innerHTML = playerInfo.positionCity;
     }
     opponentInfo = await getOpponent();
     if (opponentInfo) {
       document.querySelector("#opponent-name").innerHTML = opponentInfo.name;
       document.querySelector("#opponent-votes").innerHTML = opponentInfo.votes;
-      document.querySelector("#opponent-co2").innerHTML = opponentInfo.co2;
     }
     airportsList = await getAirports();
   }
+  destinationText.innerText = '- - -';
+  daysCounter=daysCounter-1
+  document.getElementById("days-counter").innerHTML = `${daysCounter} days`;
+
+  if (daysCounter == 1){
+    document.getElementById("game-button").innerHTML = "Confirm last flight and go to elections";
+    document.getElementById("days-counter").innerHTML = `${daysCounter} day`;
+  }
 }
-function changetoESSA(){
-  destinationIcao = "ESSA"
-  destinationText.innerText =destinationIcao
-}
-function changetoEBBR(){
-  destinationIcao = "EBBR"
-  destinationText.innerText =destinationIcao
-}
+
 // game
 gameStart();
 const destinationText = document.getElementById("player-destination");
-destinationText.innerText =destinationIcao
+destinationText.innerText = '- - -';
+document.getElementById("days-counter").innerHTML = `${daysCounter} days`;

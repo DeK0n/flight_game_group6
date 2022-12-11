@@ -178,10 +178,10 @@ async function gameTurn() {
 
 function compareVotes(){
   if(playerInfo.votes>opponentInfo.votes){
-    winStatus = "YOU WIN THE ELECTIONS"
+    winStatus = "YOU WIN THE ELECTION"
   }
   else{
-    winStatus = "YOUR OPPONENT WINS THE ELECTIONS"
+    winStatus = "YOUR OPPONENT WINS THE ELECTION"
   }
 }
 // game

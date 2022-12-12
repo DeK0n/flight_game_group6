@@ -23,7 +23,7 @@ connection = mysql.connector.connect(
 
 
 def getTemperature():
-    request = "https://api.openweathermap.org/data/2.5/weather?q=Brussels&appid=a90e3aac59a9af0d4c05758d10e19343&units=metric"
+    request = "https://api.openweathermap.org/data/2.5/weather?q=Brussels&appid={apikey}&units=metric"
     response = requests.get(request).json()
     x = str(response["weather"][0]["description"]) + \
         " and " + str(response["main"]["temp"])+" C"
